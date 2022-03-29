@@ -20,7 +20,6 @@ public class A2_3 {
 				pNum++ ;
 				if (input % 2 == 1) {
 					oNum++;
-					System.out.println(input % 2);
 				} else {
 					eNum++;
 				}
