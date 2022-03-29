@@ -28,7 +28,6 @@ public class A2_3 {
 				input = Math.abs(input);
 				if (input % 2 == 1) {
 					oNum++;
-					System.out.println(input % 2);
 				} else {
 					eNum++;
 				}
