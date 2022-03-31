@@ -13,7 +13,7 @@ public class A1_5 {
 		int r = n - m;
 		
 		int N = multiply1(n);
-		int R = multiply2(r);
+		int R = multiply1(r);
 		
 		System.out.println(N/R);
 	}
@@ -26,13 +26,5 @@ public class A1_5 {
 		}
 	}
 	
-	public static int multiply2(int num2) {
-		if (num2 == 1) {
-			return 1;
-		} else {
-			return num2 * multiply2(--num2);
-		}
-		
-	}
 
 }

@@ -13,8 +13,8 @@ public class A2_5 {
 		int r = n - m;
 
 		int N = multiply1(n);
-		int R = multiply2(r);
-		int M = multiply3(m);
+		int R = multiply1(r);
+		int M = multiply1(m);
 
 		System.out.println(N / (R * M));
 	}
@@ -27,20 +27,5 @@ public class A2_5 {
 		}
 	}
 
-	public static int multiply2(int num2) {
-		if (num2 == 1) {
-			return 1;
-		} else {
-			return num2 * multiply2(--num2);
-		}
-	}
-	
-	public static int multiply3(int num3) {
-		if (num3 == 1) {
-			return 1;
-		} else {
-			return num3 * multiply2(--num3);
-		}
-	}
 
 }
