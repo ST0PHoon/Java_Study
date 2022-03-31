@@ -16,7 +16,20 @@ public class A2_5 {
 		int R = multiply1(r);
 		int M = multiply1(m);
 
-		System.out.println(N / (R * M));
+		System.out.print("C(" + n + ", " + m + ")=" + n + "!/(" + n + "-" + m + ")!/" + m + "!=(" + n);
+		for (int i = n - 1; i > 0; i--) {
+			System.out.print("X" + i);
+		}
+		System.out.print(")/(" + r);
+		for (int i = r - 1; i > 0; i--) {
+			System.out.print("X" + i);
+		}
+		System.out.print(")/(" + m);
+		for (int i = m - 1; i > 0; i--) {
+			System.out.print("X" + i);
+		}
+		System.out.print(") = " + N + "/" + R + "/" + M + "=" + (N / (R * M)));
+
 	}
 
 	public static int multiply1(int num1) {
@@ -26,6 +39,5 @@ public class A2_5 {
 			return num1 * multiply1(--num1);
 		}
 	}
-
 
 }
