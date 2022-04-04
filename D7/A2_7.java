@@ -8,7 +8,7 @@ public class A2_7 {
 		Scanner sc = new Scanner(System.in);
 
 		int[] numbers = { 123, 32, 356, 53, 2, 67, 31, 78, 41, 9, 29 };
-		int count = 0, currentNumber, inputNumberOneDigit, numLength;
+		int currentNumber, inputNumberOneDigit, numLength;
 		System.out.println("input number 0 ot 9");
 		int digit = sc.nextInt();
 
