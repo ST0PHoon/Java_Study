@@ -11,30 +11,30 @@ public class mbA1_9 {
 		ArrayList<String> list = new ArrayList<String>();
 		ArrayList<Integer> numberList = new ArrayList<Integer>();
 		ArrayList<String> result = new ArrayList<String>();
+		String nameAndScore;
 
-		list.add("Mike 89");
-		list.add("Jay 88");
-		list.add("Kim 92");
-		list.add("Lee 85");
-		list.add("Park 90");
+		System.out.println("input 5set names and scores. ex) Mike 89");
+
+		for (int i = 0; i < 5; i++) {
+			nameAndScore = sc.nextLine();
+			list.add(nameAndScore);
+		}
 
 		for (int i = 0; i < list.size(); i++) {
-			numberList.add(Integer.parseInt(list.get(i).substring(list.get(i).length() - 2)));
+			numberList.add(Integer.parseInt(list.get(i).substring(list.get(i).indexOf(" ") + 1)));
 		}
 
 		Collections.sort(numberList);
-		
-		System.out.println(numberList);
+		Collections.reverse(numberList);
 
-		for (int i = 4; i > -1; i--) {
+		for (int i = 0; i < 5; i++) {
 			for (int j = 0; j < 5; j++) {
-				if (list.get(j).contains( Integer.toString(numberList.get(i)))) {
-					result.add(list.get(j).substring(0, list.get(j).length() - 3));
+				if (list.get(j).contains(Integer.toString(numberList.get(i)))) {
+					result.add(list.get(j).substring(0, list.get(j).indexOf(" ")));
 				}
 			}
 		}
+		
 		System.out.println(result);
-
 	}
-
 }
