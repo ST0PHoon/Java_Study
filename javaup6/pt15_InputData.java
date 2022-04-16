@@ -49,10 +49,10 @@ public class pt15_InputData {
 		return k37_personGroupArray;
 	}
 	
-	public int k37_currentStartNumber(int k37_ii, int[] k37_personGroupArrayR) {
+	public int k37_currentStartNumber(int k37_ii) {
 		int k37_startNum = 0;
 		for (int k37_i = 0; k37_i < k37_ii; k37_i++) {
-			k37_startNum += k37_personGroupArrayR[k37_i];
+			k37_startNum += k37_personGroupArray[k37_i];
 		}
 		return k37_startNum;
 	}

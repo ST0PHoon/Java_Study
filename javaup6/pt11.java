@@ -18,8 +18,9 @@ public class pt11 {
 			System.out.printf("MSG k37_elev3[%s]\n",k37_elev3.k37_help);
 		}
 		
-		k37_elev3.k37_Repair();
-		System.out.printf("MSG k37_elev3[%s]\n",k37_elev3.k37_help);
+		// extends(상속) 받아서 사용한 함수의 값이 적용되어 출력된다.
+		k37_elev3.k37_Repair();	//수리중 메세지 입력
+		System.out.printf("MSG k37_elev3[%s]\n",k37_elev3.k37_help);	// 입력된 메세지 출력
 	}
 
 }
