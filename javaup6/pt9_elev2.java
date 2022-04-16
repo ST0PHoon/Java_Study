@@ -2,11 +2,12 @@ package javajump6;
 
 public class pt9_elev2 {
 	// 12, 13pg 생성자 
-	private int k37_limit_up_floor;		//private(클래스내에서만 사용가능) 정수형 변수 선언, 최상층
-	private int k37_limit_down_floor;	//private(클래스내에서만 사용가능) 정수형 변수 선언, 최하층
-	private int k37_floor;				//private(클래스내에서만 사용가능) 정수형 변수 선언, 현재층
-	private String k37_help;	//private(클래스내에서만 사용가능) 문자열형 변수 선언, 도움말 문자열
-
+	//elev3 의 extends 예시를 들기위해 private에서 public으로 변경
+	public int k37_limit_up_floor;		//private(클래스내에서만 사용가능) 정수형 변수 선언, 최상층
+	public int k37_limit_down_floor;	//private(클래스내에서만 사용가능) 정수형 변수 선언, 최하층
+	public int k37_floor;				//private(클래스내에서만 사용가능) 정수형 변수 선언, 현재층
+	public String k37_help;	//private(클래스내에서만 사용가능) 문자열형 변수 선언, 도움말 문자열
+	
 	pt9_elev2() {
 		k37_limit_up_floor = 10;
 		k37_limit_down_floor = 1;

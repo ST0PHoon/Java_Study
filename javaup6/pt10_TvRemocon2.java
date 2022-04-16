@@ -1,16 +1,16 @@
 package javajump6;
 
-public class pt10_rmt {
+public class pt10_TvRemocon2 {
 	// 14pg 생성자, 리모콘
 	private int k37_Vol;	//현재볼륨
 	private int k37_Channel;	//현재채널
 	
-	pt10_rmt() {
+	pt10_TvRemocon2() {
 		k37_Vol = 5;	//현재볼륨
 		k37_Channel = 48;	//현재채널
 	}
 	
-	pt10_rmt(int k37_currentVol, int k37_currentCh) {
+	pt10_TvRemocon2(int k37_currentVol, int k37_currentCh) {
 		k37_Vol = k37_currentVol;	//현재볼륨
 		k37_Channel = k37_currentCh;	//현재채널
 	}
