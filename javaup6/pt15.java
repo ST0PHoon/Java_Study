@@ -73,10 +73,6 @@ public class pt15 {
 					k37_inData.k37_totalsubjectAve(k37_i, k37_inData.k37_sum), k37_inData.k37_totalaveAve(k37_i, k37_inData.k37_ave));
 			
 		}
-		
-
-		
-
 
 
 	}
