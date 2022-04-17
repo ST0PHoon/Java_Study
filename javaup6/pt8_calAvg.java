@@ -20,17 +20,17 @@ public class pt8_calAvg {
 	
 	//3개의 정수형 매개변수를 받아 합을 구하는 메소드 선언, 정수형 리턴
 	public static int k37_sum(int k37_a, int k37_b, int k37_c) {	
-		return (k37_a + k37_b + k37_c) / 3;
+		return (k37_a + k37_b + k37_c) ;
 	}
 
 	// 4개의 정수형 매개변수를 받아 합을 구하는 메소드 선언, 정수형 리턴
 	public static int k37_sum(int k37_a, int k37_b, int k37_c, int k37_d) {
-		return (k37_a + k37_b + k37_c + k37_d) / 4;
+		return (k37_a + k37_b + k37_c + k37_d) ;
 	}
 
 	// 5개의 정수형 매개변수를 받아 합을 구하는 메소드 선언, 정수형 리턴
 	public static int k37_sum(int k37_a, int k37_b, int k37_c, int k37_d, int k37_e) {
-		return (k37_a+ k37_b + k37_c + k37_d + k37_e)/5;
+		return (k37_a+ k37_b + k37_c + k37_d + k37_e);
 	}
 }
 

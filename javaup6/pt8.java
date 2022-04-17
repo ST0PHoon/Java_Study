@@ -40,7 +40,7 @@ public class pt8 {
 		System.out.printf("=====================================\n");
 		System.out.printf("%-4.4s%-4.4s%-4.4s%-4.4s%-4.4s%-4.4s%-4.4s%-4.4s\n","이름","국어","영어","수학","과학","사회","총점","평균");
 		System.out.printf("=====================================\n");
-		System.out.printf("%-4.4s%-4d%-4d %-4d %-4d %-4d %-4d%-4.1f\n\n","폴리융",k37_Korean,k37_English,k37_Math,k37_Sum,k37_Science,k37_Society,k37_Avg);
+		System.out.printf("%-4.4s%-4d%-4d %-4d %-4d %-4d %-4d%-4.1f\n\n","폴리융",k37_Korean,k37_English,k37_Math,k37_Science,k37_Society,k37_Sum,k37_Avg);
 	}
 
 }
