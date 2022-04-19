@@ -16,10 +16,10 @@ public class pg9 {
 				"피코크 들깨미역국500", "흑원당 말차 밀크티", "상하유기농우유900", "트라피스트 유기 포도", "동원참치살코기100g*3", "오뚜기 오즈키친머쉬",
 				"치킨스프카레 200g" };
 		// 제품별 가격 입력, 정수형 배열로 생성
-		int[] k37_price = { 7500, 6900, 5980, 3300, 5500, 3360, 6610, 2750, 10800, 4980, 2480, 7920, 4980, 4980, 7130,
+		int[] k37_price = { 10000000, 6900, 5980, 3300, 5500, 3360, 6610, 2750, 10800, 4980, 2480, 7920, 4980, 4980, 7130,
 				3980, 4480, 4980, 3210, 6950, 2980, 1990, 1980, 3980, 4480, 4380, 8980, 5980, 5980, 2680 };
 		// 각 제품별 수량 입력, 정수형 배열로 생성
-		int[] k37_num = { 2, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 2, 1, 1, 1, 1 };
+		int[] k37_num = { 1, 11, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 2, 1, 1, 1, 1 };
 		// 각 제품이 면세제품인지 입력, 불리언형 배열로 생성, true면 면세, false면 안면세
 		boolean[] k27_taxfree = { false, false, false, false, false, false, true, false, true, true, false, false,
 				false, false, false, false, true, false, false, false, false, false, false, false, false, true, false,
@@ -40,9 +40,9 @@ public class pg9 {
 		int k37_totalPrice = 0; // 결제 금액
 		
 		
-		System.out.println("이마트 죽전점 (031)888-1234");
-		System.out.println("206-86-50913 강희석");
-		System.out.println("용인 수지구 포은대로 552");
+		System.out.println("          이마트 죽전점 (031)888-1234");
+		System.out.println("   emart  206-86-50913 강희석");
+		System.out.println("          용인 수지구 포은대로 552");
 		
 		System.out.println("영수증 미지참시 교환/환불 불가");
 		System.out.println("정상상품에 한함, 30일 이내(신선 7일)");
@@ -50,9 +50,9 @@ public class pg9 {
 		System.out.println("교환/환불 구매점에서 가능(결제카드 지참)");
 		System.out.println();
 		// 구매한 시각을 출력합니다. 2022-04-19 00:54 형식으로 출력
-		System.out.printf("[구 매]%s    POS:0011-9861\n",k37_Date);		
+		System.out.printf("[구 매]%s     POS:0011-9861\n",k37_Date);		
 		k37_Line(); 
-		System.out.printf("   %5s %14s %3s %4s\n", "상 품 명", "단 가", "수량", "금 액");
+		System.out.printf("   %5s  %12s%3s%6s\n", "상 품 명", "단 가", "수량", "금 액");
 		k37_Line();
 		// 물품의 갯수만큼 도는 for문 작성, 배열에서 각각 모든 성분을 불러올때 사용한다.
 		for (int k37_i = 0; k37_i < k37_itemname.length; k37_i++) {
@@ -62,55 +62,64 @@ public class pg9 {
 			
 			if(k27_taxfree[k37_i] == true) {
 				k37_star = "*";
-				k37_totalTaxFreePrice = k37_totalTaxFreePrice + k37_sum;
+				k37_totalTaxFreePrice = k37_totalTaxFreePrice + k37_sum;	//면세 물품 합계
 			} else {
 				k37_star = " ";
-				k37_totalNetPrice = k37_totalNetPrice + k37_sum;
+				k37_totalNetPrice = k37_totalNetPrice + k37_sum;	//과세 물품 합계, (+부가세 상태)
 			}
 			// 면세여부, 물품을 20길이만큼 자른 String, 3번째마다 콤마가 찍힌 가격, 수량, 콤마가 찍힌 가격 * 수량을 틀에 맞게 출력한다. // 모든 물품 
-			System.out.printf("%s%s%8s%3d%8s\n",k37_star, k37_subStrByte(k37_itemname[k37_i],20), k37_df.format(k37_price[k37_i]), k37_num[k37_i],
+			System.out.printf("%-2s%s%10s %2d %10s\n",k37_star, k37_subStrByte(k37_itemname[k37_i],15), k37_df.format(k37_price[k37_i]), k37_num[k37_i],
 					 k37_df.format(k37_price[k37_i] * k37_num[k37_i]));
-			// 5번째마다 줄 추가
+
 			if(k37_i % 5 == 4) {
-				k37_Line();
+				k37_Line(); // 5번째마다 줄 추가
 			}
 		}
 		
-		k37_totalPrice = k37_totalNetPrice + k37_totalTaxFreePrice;
-		k37_NetPrice = (int) (k37_totalNetPrice / (1 + k37_taxRate));
-		k37_tax = k37_totalNetPrice - k37_NetPrice; // 부가세
+		k37_totalPrice = k37_totalNetPrice + k37_totalTaxFreePrice;	// 총 가격 계산
+		k37_NetPrice = (int) (k37_totalNetPrice / (1 + k37_taxRate));	// 부가세 뺀 과세물품 가격
+		k37_tax = k37_totalNetPrice - k37_NetPrice; // 과세물품의 부가세 금액 계산
+		// 물품 개수 출력, length 를 이용해서 배열의 길이를 가져오면 그게 물품 개수가 된다.
+		System.out.println("");
+		System.out.printf("%22s %13d\n", "총 품목 수량",k37_itemname.length);
 		
-		System.out.printf("%21s %13d\n", "총 품목 수량", k37_itemname.length);
-		System.out.printf("%22s%14s\n", "(*)면 세  물 품", k37_df.format(k37_totalTaxFreePrice));
-		System.out.printf("%22s%14s\n", "과 세  물 품", k37_df.format(k37_NetPrice));
-		System.out.printf("%23s%14s\n", "부   가   세", k37_df.format(k37_tax));
-		System.out.printf("%24s%14s\n", "합        계", k37_df.format(k37_totalPrice));
-		System.out.printf("%s %22s\n", "결 제 대 상 금 액", k37_df.format(k37_totalPrice));
+		// 면세물품 가격, 데시말포멧에서 선언해둔 포멧으로 변환, string 형태로 바뀐다.
+		System.out.printf("%23s%14s\n", "(*)면 세  물 품", k37_df.format(k37_totalTaxFreePrice));
+		// 과세물품 총 가격, 데시말포멧에서 선언해둔 포멧으로 변환, string 형태로 바뀐다. 
+		System.out.printf("%23s%14s\n", "과 세  물 품", k37_df.format(k37_NetPrice));
+		// 부과세 출력, 데시말포멧에서 선언해둔 포멧으로 변환, string 형태로 바뀐다.
+		System.out.printf("%24s%14s\n", "부   가   세", k37_df.format(k37_tax));
+		// 최종 금액 출력, 데시말포멧에서 선언해둔 포멧으로 변환, string 형태로 바뀐다.
+		System.out.printf("%25s%14s\n", "합        계", k37_df.format(k37_totalPrice));
+		// 졀제대상금액 출력, 데시말포멧에서 선언해둔 포멧으로 변환, string 형태로 바뀐다.
+		System.out.printf("%s %23s\n", "결 제 대 상 금 액", k37_df.format(k37_totalPrice));
 			
-		k37_Line();
+		k37_Line();	//한 줄 출력 출력
 		
-		System.out.printf("%s%27s\n", "0012 KEB 하나", "541707**0484/35860658");
-		System.out.printf("%s%18s%s\n", "카드결제(IC)", "일시불/ ", k37_df.format(k37_totalPrice));
+		System.out.printf("%s%28s\n", "0012 KEB 하나", "541707**0484/35860658");
+		// 카드결제 금액 출력, 데시말포멧에서 선언해둔 포멧으로 변환, string 형태로 바뀐다.
+		System.out.printf("%s%16s%10s\n", "카드결제(IC)", "일시불 / ", k37_df.format(k37_totalPrice));
 		
-		k37_Line();
+		k37_Line();	//한 줄 출력 출력
 		
-		System.out.printf("%21s\n", "[신세계포인트 적립]");
+		System.out.printf("%25s\n", "[신세계포인트 적립]");
 		System.out.printf("%s\n", "홍*두 고객님의 포인트 현황입니다.");
-		System.out.printf("%s%20s%6s\n", "금회발생포인트", "9350**9995", "164");
-		System.out.printf("%s%24s\n", "누계(가용)포인트", "5,637(  5,473)");
+		System.out.printf("%s%20s%7s\n", "금회발생포인트", "9350**9995", "164");
+		System.out.printf("%s%25s\n", "누계(가용)포인트", "5,637(  5,473)");
 		System.out.printf("%s\n", "*신세계 포인트 유효기간은 2년입니다.");
 		
-		k37_Line();
+		k37_Line();	//한 줄 출력 출력
 		
 		System.out.printf("%21s\n", "구매금액기준 무료주차시간 자동부여");
-		System.out.printf("%s%29s\n", "차량번호 : ", "34저 ****");
+		System.out.printf("%s%29s\n", "차량번호 : ", "34저****");
 		System.out.printf("%s%30s\n", "입차시간 : ", "2022-04-18 12:20:04");
 		
 		k37_Line();
 		
-		System.out.printf("%s%24s\n", "캐셔:084599 양00", "1150");
+		System.out.printf("%s%25s\n", "캐셔:084599 양00", "1150");
 		System.out.printf("%36s\n", "|||||||||||||||||||||||||||||||");
 		System.out.printf("%36s\n", "|||||||||||||||||||||||||||||||");
+		// 시간 출력 YYYYMMdd형태로 메세지에 맞게 출력한다.
 		System.out.printf("%14s%s\n", k37_sdtB.format(k37_calt.getTime()), "/00119861/00164980/31");
 		
 		
@@ -125,7 +134,7 @@ public class pg9 {
 		// 오늘 날짜 데이터를 받아온다.
 		Date nowDate = new Date();
 		// 날짜 데이터를 원하는 형식으로 바꿀수있다. 1995/04/18 23:22:53 식으로 출력
-		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 		// 날짜 데이터를 포멧에 맞게 바꾸고 String에 입력, SimpleDateFormat인스턴스를 사용하면 String으로 형변환 된다.
 		String k37_date = simpleDateFormat.format(nowDate);
 		// 결과 리턴
@@ -146,22 +155,31 @@ public class pg9 {
            }
            return k37_source;	// 결과를 리턴
         } else {	//물품 이름의 길이가 설정한 길이보다 길면 잘라준다.
-        	// StringBuffer를 생성
+        	// StringBuffer를 생성, String 보다 문자열을 편집할때 속도가 빠르다
         	StringBuffer k37_sb = new StringBuffer(k37_cutLength);
-        	int k37_cnt = 0;	// 
+        	int k37_cnt = 0;	// 문자열을 앞에서부터 한자씩 늘려갈때 길이를 측정할 용도
+        	//받아온 문자열을 char 배열로 바꿔서 선언한 k37_ch에 하나씩 추가하는 for문 
         	for (char k37_ch : k37_source.toCharArray()) {
+        		// 제일 처음엔 빈 k37_ch를 측정 이후엔
+        		// 문자열의 첫번째 글자를 추가하고 바이트 길이측정 (한글이면 2, 영어면 1)
+        		// 문자열의 두번째 글자 추가(이미 첫번째는 추가상태) ... 바이트 길이 측정... 마지막까지 진행 
         		k37_cnt += String.valueOf(k37_ch).getBytes().length;
+        		// 위 상태를 진행하다가 길이가 k37_cutLength(내가설정한 길이) 보다 커지면 멈춘다.
         		if (k37_cnt > k37_cutLength)
         			break;
+        		// 다음 문자 추가
         		k37_sb.append(k37_ch);
         	}
-           
-           if(k37_sb.toString().getBytes().length == 19) {
-        	   k37_sb.append(" ");
+           // 20번째 한글이 오면 공백이 발생하는 문제해결, 바이트 길이가
+        	// 내가 원하는 길이보다 1 작으면 공백 추가
+           if(k37_sb.toString().getBytes().length == (k37_cutLength - 1)) {
+        	   k37_sb.append(" ");	//append 명령어를 이용하면 StringBuffer 선언한 문자열 맨뒤에 문자 추가된다.
            }
-            return k37_sb.toString();
+            return k37_sb.toString();	//String으로 형변환 하여 출력
          }
 
    }
+	
+
 
 }
