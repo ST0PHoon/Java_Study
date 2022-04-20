@@ -82,7 +82,7 @@ public class pg35 {
 		System.out.println("==================================================");
 		// 페이지별 인원수 설정
 		if(k37_i + 1 == k37_totalPages) {	// 마지막페이지라면
-			if (k37_iPerson == k37_pgPerson) {	// 총인원 = 페이지당 인원 동일할때 0명 뜨는 에레 수정
+			if (k37_iPerson % k37_pgPerson == 0) {	// 총인원 = 페이지당 인원 동일할때 0명 뜨는 에레 수정
 				k37_currentPagePerson = k37_pgPerson;	// 총인원수 입력
 			}else {
 				k37_currentPagePerson = k37_iPerson % k37_pgPerson;	// 200 30 이라면 20명이 들어간다.

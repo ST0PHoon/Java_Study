@@ -40,7 +40,8 @@ public class pt15_InputData {
 		// 배열의 크기만큼 돈다, 0부터 1씩증가하면 6까지
 		for (int k37_i = 0; k37_i < k37_personGroupArray.length ; k37_i++) {
 			if (k37_i == k37_personGroupArray.length - 1 ) {	// 마지막장이라면, 페이지당 인원으로 나눈 나머지를 넣어라
-				if(k37_totalPerson == k37_pgPerson) {	// 총인원 = 페이지당 인원 동일할때 0명 뜨는 에레 수정
+				// 총인원 = 페이지당 인원 동일할때 0명 뜨는 에레 and n명일때 자신의 인수를 인원수로 받으면 마지막페이지에 뜨는 에러 수정
+				if(k37_totalPerson % k37_pgPerson == 0) {	
 					k37_personGroupArray[k37_i] = k37_pgPerson;
 				} else {
 					k37_personGroupArray[k37_i] = k37_totalPerson % k37_pgPerson;	//20 들어갈 예정			
