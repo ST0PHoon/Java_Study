@@ -35,17 +35,6 @@ public class pt15_InputData {
 		}
 	}
 	
-	public String k37_printDate() {	//현재 시간을 포멧에 맞게 리턴하는 메소드, 문자열
-		//시간의 형태를 짜둔다.
-		SimpleDateFormat format1 = new SimpleDateFormat ( "yyyy.MM.dd HH:mm:ss");
-		//현재시간을 가져온다.
-		Date k37_time = new Date();
-		//선언한 문자열에 포멧에 맞춰 시간을 입력한다.	
-		String k37_time1 = format1.format(k37_time);
-		
-		return k37_time1;	//입력한 시간문자열을 리턴
-	}
-	
 	public int[] k37_perPagePerson() {	// 각 페이지 별로 몇명이 있는지 입력하여 정수형 배열로 리턴한다.
 		// 배열의 크기만큼 돈다, 0부터 1씩증가하면 6까지
 		for (int k37_i = 0; k37_i < k37_personGroupArray.length ; k37_i++) {
@@ -223,5 +212,15 @@ public class pt15_InputData {
 		return k37_sum /  k37_endNum;	// 리턴할때 누적합 / 페이지까지 누적인원 한 값을 리턴
 	}
 	
+	public String k37_printDate() {	//현재 시간을 포멧에 맞게 리턴하는 메소드, 문자열
+		//시간의 형태를 짜둔다.
+		SimpleDateFormat format1 = new SimpleDateFormat ( "yyyy.MM.dd HH:mm:ss");
+		//현재시간을 가져온다.
+		Date k37_time = new Date();
+		//선언한 문자열에 포멧에 맞춰 시간을 입력한다.	
+		String k37_time1 = format1.format(k37_time);
+		
+		return k37_time1;	//입력한 시간문자열을 리턴
+	}
 
 }

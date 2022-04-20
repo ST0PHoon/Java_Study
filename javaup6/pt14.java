@@ -13,7 +13,7 @@ public class pt14 {
 		String k37_time1 = k37_inData.k37_printDate();
 		//총 인원수 만큼 도는 for문 작성. 0부터 1씩증가하며 29까지 돈다.
 		for (int k37_i = 0; k37_i < k37_iPerson; k37_i++) {
-			String k37_name = String.format("정지%02d", k37_i);	//문자열 이름생성 (정지 + 넘버링 형태)
+			String k37_name = String.format("정지%02d", k37_i + 1);	//문자열 이름생성 (정지 + 넘버링 형태)
 			//랜덤 함수는 0이상 ~ 1미만의 double형 수를 무작위로 생성, 0부터 100사이를 만들기위해 곱하기 100실시
 			int k37_kor = (int)(Math.random() * 100);	// 국어점수 만들기, double > int 형으로 형변환
 			int k37_eng = (int)(Math.random() * 100);	// 영어점수 만들기, double > int 형으로 형변환

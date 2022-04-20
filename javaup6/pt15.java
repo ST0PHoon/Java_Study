@@ -27,48 +27,48 @@ public class pt15 {
 				k37_inData.k37_SetDate(k37_startNumber + k37_j + 1, k37_name,k37_kor,k37_eng,k37_mat);
 			}
 			
-			System.out.printf("PAGE: %d       출력일자 :"  + k37_time1 + "\n", k37_i + 1);	//현재 페이지(0이라 + 1)와 날짜를 출력한다.
-			System.out.println("=================================================");
-			System.out.printf("%-4.4s %-4.4s %-4.4s %-4.4s %-4.4s %-4.4s %-4.4s\n","번호","이름","국어","영어","수학","총점","평균");	//구분 출력
-			System.out.println("=================================================");
+			System.out.printf("PAGE: %d            출력일자 : "  + k37_time1 + "\n", k37_i + 1);	//현재 페이지(0이라 + 1)와 날짜를 출력한다.
+			System.out.println("==================================================");
+			System.out.printf("%-2.2s %-4.4s %4.4s %5.5s %5.5s %5.5s %4.4s\n","번호","이름","국어","영어","수학","총점","평균");	//구분 출력
+			System.out.println("==================================================");
 			
 			// 해당 페이지의 인원수 만큼 도는 for문 작성, 평소에 30번, 마지막은 20번 돈다.
 			for (int k37_k = 0; k37_k < k37_personGroupArray[k37_i]; k37_k++) {
 				// k37_k + k37_startNumber는 페이지 시작번호 + 내가 페이지에서 몇번째, 그럼 누적 번호가 된다.1부터 30, 30 ~ 60 .. 180 ~ 200으로 늘어남
 				// 성적배열에서 내 성적을 꺼내온다. 배열이여서 +1은 안했으며, 각 배열의 크기는 200이다.
-				System.out.printf("%03d %5.5s %3d   %3d   %3d   %3d   %.2f\n",
+				System.out.printf("%03d %5.5s %5d %7d %7d %7d %7.2f\n",
 						k37_inData.k37_i[k37_k + k37_startNumber], k37_inData.k37_name[k37_k + k37_startNumber],
 						k37_inData.k37_kor[k37_k + k37_startNumber], k37_inData.k37_eng[k37_k + k37_startNumber],
 						k37_inData.k37_mat[k37_k + k37_startNumber], k37_inData.k37_sum[k37_k + k37_startNumber],
 						k37_inData.k37_ave[k37_k + k37_startNumber]);
 			}
-			System.out.println("=================================================");
+			System.out.println("==================================================");
 			
 			System.out.println("현재페이지");
 			//현재 페이지의 과목별 성적합을 보여준다. k37_inData 클래스에서 k37_curSubjectSum 메소드에 k37_i(몇 페이지)와 각 성적의 배열을 보내주고, 과목별 성적합을 리턴.
 			//평균은 실수형이기 때문에 k37_curAveSum의 메소드 따로 생성
-			System.out.printf("%-2.2s        %4d  %4d  %4d  %4d  %.2f\n", "합계",k37_inData.k37_curSubjectSum(k37_i, k37_inData.k37_kor),
+			System.out.printf("%2.2s %12d %7d %7d %7d %8.2f\n", "합계",k37_inData.k37_curSubjectSum(k37_i, k37_inData.k37_kor),
 					k37_inData.k37_curSubjectSum(k37_i, k37_inData.k37_eng), k37_inData.k37_curSubjectSum(k37_i, k37_inData.k37_mat),
 					k37_inData.k37_curSubjectSum(k37_i, k37_inData.k37_sum), k37_inData.k37_curAveSum(k37_i, k37_inData.k37_ave));
 			
 			//현재 페이지의 과목별 평균을 보여준다. k37_inData 클래스에서 k37_cursubjectAve 메소드에 k37_i(몇 페이지)와 각 성적의 배열을 보내주고, 과목별 평균을 리턴.
 			//평균은 실수형이기 때문에 k37_curaveAve의 메소드 따로 생성
-			System.out.printf("%-2.2s       %4.2f %4.2f %4.2f %4.2f  %.2f\n", "평균",k37_inData.k37_cursubjectAve(k37_i, k37_inData.k37_kor),
+			System.out.printf("%2.2s %12.2f %7.2f %7.2f %7.2f %8.2f\n", "평균",k37_inData.k37_cursubjectAve(k37_i, k37_inData.k37_kor),
 					k37_inData.k37_cursubjectAve(k37_i, k37_inData.k37_eng), k37_inData.k37_cursubjectAve(k37_i, k37_inData.k37_mat),
 					k37_inData.k37_cursubjectAve(k37_i, k37_inData.k37_sum), k37_inData.k37_curaveAve(k37_i, k37_inData.k37_ave));
 			
-			System.out.println("=================================================");
+			System.out.println("==================================================");
 			
 			//지금까지 페이지의 과목별 성적합을 보여준다. k37_inData 클래스에서 k37_totalSubjectSum 메소드에 k37_i(몇 페이지)와 각 성적의 배열을 보내주고, 과목별 성적합을 리턴.
 			//평균은 실수형이기 때문에 k37_totalAveSum의 메소드 따로 생성
 			System.out.println("누적페이지");
-			System.out.printf("%-2.2s        %4d  %4d  %4d  %4d  %.2f\n", "합계",k37_inData.k37_totalSubjectSum(k37_i, k37_inData.k37_kor),
+			System.out.printf("%2.2s %12d %7d %7d %7d %8.2f\n", "합계",k37_inData.k37_totalSubjectSum(k37_i, k37_inData.k37_kor),
 					k37_inData.k37_totalSubjectSum(k37_i, k37_inData.k37_eng), k37_inData.k37_totalSubjectSum(k37_i, k37_inData.k37_mat),
 					k37_inData.k37_totalSubjectSum(k37_i, k37_inData.k37_sum), k37_inData.k37_totalAveSum(k37_i, k37_inData.k37_ave));
 			
 			//지금까지 페이지의 과목별 평균을 보여준다. k37_inData 클래스에서 k37_totalsubjectAve 메소드에 k37_i(몇 페이지)와 각 성적의 배열을 보내주고, 과목별 평균을 리턴.
 			//평균은 실수형이기 때문에 k37_totalaveAve의 메소드 따로 생성
-			System.out.printf("%-2.2s       %4.2f %4.2f %4.2f %4.2f  %.2f\n\n\n", "평균",k37_inData.k37_totalsubjectAve(k37_i, k37_inData.k37_kor),
+			System.out.printf("%2.2s %12.2f %7.2f %7.2f %7.2f %8.2f\n\n\n", "평균",k37_inData.k37_totalsubjectAve(k37_i, k37_inData.k37_kor),
 					k37_inData.k37_totalsubjectAve(k37_i, k37_inData.k37_eng), k37_inData.k37_totalsubjectAve(k37_i, k37_inData.k37_mat),
 					k37_inData.k37_totalsubjectAve(k37_i, k37_inData.k37_sum), k37_inData.k37_totalaveAve(k37_i, k37_inData.k37_ave));
 			
