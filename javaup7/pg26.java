@@ -8,10 +8,8 @@ public class pg26 {
 		// pg26 클래스배열
 		int k37_iPerson = 5;	//인원수 정수형으로 입력 5명
 
-		
-		
-		pg26_OneRec [] k37_inData = new pg26_OneRec[k37_iPerson];
-		
+		pg26_OneRec [] k37_inData = new pg26_OneRec[k37_iPerson];	// pg26_OneRec 클래스 배열 생성, 크기 인원수로 설정
+		// 0부터 1씩 증가하면서 인원수 만큼 도는 for문 작성
 		for (int k37_i = 0; k37_i < k37_iPerson; k37_i++) {
 			String k37_name = String.format("정지%02d", k37_i);	//문자열 이름생성 (정지 + 넘버링 형태)
 			//랜덤 함수는 0이상 ~ 1미만의 double형 수를 무작위로 생성, 0부터 100사이를 만들기위해 곱하기 100실시
@@ -22,12 +20,11 @@ public class pg26 {
 			k37_inData[k37_i] = new pg26_OneRec(k37_name,k37_kor,k37_eng,k37_mat);
 
 			//번호, 다른 클래스에서 선언된 배열에서 필요한 값, 양식에 맞춰서 출력, 학생별 성적, 총점 평균
-			System.out.printf("번호:%d, 이름:%s, 국어:%d, 영어:%d, 수학:%d, 총점:%d, 평균:%f\n", k37_i,
+			System.out.printf("번호:%d, 이름:%s, 국어:%2d, 영어:%2d, 수학:%2d, 총점:%3d, 평균:%f\n", k37_i,
 					k37_inData[k37_i].k37_getName(), k37_inData[k37_i].k37_getKor(),k37_inData[k37_i].k37_getEng(),
 					k37_inData[k37_i].k37_getMat(),k37_inData[k37_i].k37_getSum(), k37_inData[k37_i].k37_getAve());
 
 		}
-		
 		
 	}
 

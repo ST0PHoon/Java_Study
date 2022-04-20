@@ -1,14 +1,14 @@
 package javajump7;
 
-public class pg30_OneRec {
-	// pg30 클래스의 ArrayList
+public class pg33_OneRec {
+	// pg33 클래스의 ArrayList
 	private int k37_studentId;		//정수형 변수 학번 생성
 	private String k37_name;	//문자열 변수 이름 생성
 	private int k37_kor;	//정수형 변수 국어 생성
 	private int k37_eng;	//정수형 변수 영어 생성
 	private int k37_mat;	//정수형 변수 수학 생성
 
-	public pg30_OneRec(int studentId, String name, int kor, int eng, int mat) {	//생성자 만들기 변수 4개(이름, 국어,영어,수학)
+	public pg33_OneRec(int studentId, String name, int kor, int eng, int mat) {	//생성자 만들기 변수 4개(이름, 국어,영어,수학)
 			this.k37_studentId = studentId;	//위에서 선언한 변수에 생성자로 받아온 값 입력
 			this.k37_name = name;	//위에서 선언한 변수에 생성자로 받아온 값 입력
 			this.k37_kor = kor;	//위에서 선언한 변수에 생성자로 받아온 값 입력

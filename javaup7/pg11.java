@@ -77,10 +77,6 @@ public class pg11 {
 		String k37_onlynumber = k37_price.substring(32 - k37_kNum).replace(",","").trim();
 		return k37_onlynumber;
 	}
-	
-	
-	
-//	public static String k37_addBlank();
 
 }
 

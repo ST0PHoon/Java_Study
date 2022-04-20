@@ -4,11 +4,11 @@ public class pg10 {
 
 	public static void main(String[] args) {
 		// 10pg 한글계산
-		System.out.printf("k37_HanBlankForeword[%s]\n", k37_HanBlankForeword("한글abcd", 15));
-		System.out.printf("k37_HanBlankForeword[%s]\n", k37_HanBlankForeword("한글한글abcd", 15));
-		System.out.printf("k37_HanBlankBackword[%s]\n", k37_HanBlankBackword("한글abcd", 15));
-		System.out.printf("k37_HanBlankBackword[%s]\n", k37_HanBlankBackword("한글한글abcd", 15));
-		System.out.printf("한글은 [%d]개\n", k37_HanCount("한글한글aa"));
+		System.out.printf("k37_HanBlankForeword[%s]\n", k37_HanBlankForeword("한글abcd", 15));	// 포멧에 맞게 메소드 실행
+		System.out.printf("k37_HanBlankForeword[%s]\n", k37_HanBlankForeword("한글한글abcd", 15));	// 포멧에 맞게 메소드 실행
+		System.out.printf("k37_HanBlankBackword[%s]\n", k37_HanBlankBackword("한글abcd", 15));	// 포멧에 맞게 메소드 실행
+		System.out.printf("k37_HanBlankBackword[%s]\n", k37_HanBlankBackword("한글한글abcd", 15));	// 포멧에 맞게 메소드 실행
+		System.out.printf("한글은 [%d]개\n", k37_HanCount("한글한글aa"));	// 포멧에 맞게 메소드 실행
 		
 	}
 	
