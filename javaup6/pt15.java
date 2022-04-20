@@ -4,8 +4,8 @@ public class pt15 {
 
 	public static void main(String[] args) {
 		// 40 pg 성적집계표 출력
-		int k37_iPerson = 200;		// 총 인원수 입력, 정수형, 200명
-		int k37_onepagePerson = 30;	// 한페이지당 보여줄 인원수 입력, 정수형, 30명
+		int k37_iPerson = 12;		// 총 인원수 입력, 정수형, 200명
+		int k37_onepagePerson = 11;	// 한페이지당 보여줄 인원수 입력, 정수형, 30명
 		//생성자, k37_iPerson, k37_onepagePerson를 변수로 받는 메소드 선언, k37_nData로 사용
 		pt15_InputData k37_inData = new pt15_InputData(k37_iPerson, k37_onepagePerson);
 		//현재시간 설정해둔 포멧에 맞게 출력해서 문자열에 입력
