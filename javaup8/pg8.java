@@ -22,11 +22,10 @@ public class pg8 {
 		}
 		// field_name 문자열 배열에 첫줄을 ,단위로 잘라서 입력한다.
 		String[] k37_field_name = k37_readtxt.split(",");
-		
-		// 폴리텍대학 위도 경도 입력
-		double k37_lat = 37.3860521;
+		String maxspot = "";	//  최대 최소 거리 지점명
+		String mintspot = "";
+		double k37_lat = 37.3860521;			// 폴리텍대학 위도 경도 입력
 		double k37_lng = 127.1214038;
-		
 		int k37_k37_LineCnt = 1;	// 현재 몇번째를 돌고 있는지 확인할 정수형 변수 선언
 		int k37_maxnumber = 0;	// 최대값의 위치를 담을 변수 선언
 		int k37_minnumber = 0;	// 최소값의 위치를 담을 변수 선언
@@ -34,10 +33,9 @@ public class pg8 {
 		double k37_distMin = 0.0;	// 최소거리를 구할 변수 선언
 		
 		while((k37_readtxt = k37_br.readLine()) != null) { 	// 값이 없을때까지 도는 while문 작성
-			
 			String [] k37_field = k37_readtxt.split(",");	// 다음 내용을 콤마 단위로 잘라서 field 배열에 넣는다.
 			System.out.printf("**[%d번째 항목]***********************\n",k37_k37_LineCnt);	// 지금 몇번째 항목인지 출력한다.
-			System.out.printf(" %s : %s\n", k37_field_name[10], k37_field[10]);	// 해당 줄의 소재지지번주소의 항목과 내용을 출력한다.
+			System.out.printf(" %s : %s\n", k37_field_name[1], k37_field[1]);	// 해당 줄의 설치장소의 항목과 내용을 출력한다.
 			System.out.printf(" %s : %s\n", k37_field_name[13], k37_field[13]);	// 해당 줄의 위도 : 위도값 으로 출력한다.
 			System.out.printf(" %s : %s\n", k37_field_name[14], k37_field[14]);	// 해당 줄의 경도 : 경도값 으로 출력한다.
 			// 거리 계산 (피타고라스 정리) sqrt(제곱근), pew(제곱), field의 값을 더블형으로 바꿔서 폴리텍 대학의 좌표와 거리계산
@@ -52,24 +50,25 @@ public class pg8 {
 				k37_distMin = k37_dist;	// 해당 값을 최소값 변수에 넣어라
 				k37_maxnumber = k37_k37_LineCnt;	// 최대값의 번호(몇번째줄)을 넣어라
 				k37_minnumber = k37_k37_LineCnt;	// 최소값의 번호(몇번째줄)을 넣어라
-				
-				
+				maxspot = k37_field[1];
+				mintspot =  k37_field[1];
 			} else {
 				if(k37_dist > k37_distMax) {
 					k37_distMax = k37_dist;	// 최대값을 갱신한다.
 					k37_maxnumber = k37_k37_LineCnt;	//최대값의 위치를 갱신한다.
+					maxspot = k37_field[1];
 				}
 				if(k37_distMin > k37_dist) {
 					k37_distMin = k37_dist;	//최소값을 갱신한다.
 					k37_minnumber = k37_k37_LineCnt;	// 최소값의 위치를 갱신한다.
+					mintspot =  k37_field[1];
 				}
 			}
-			
 			k37_k37_LineCnt++;	// 다음줄로 넘어갔다는 의미로 +1
 		}
 		// 최대거리 , 최소거리 와 각 몇번째 줄인지 출력한다.
-		System.out.printf("[%d번째 항목] 최대거리 : %f", k37_maxnumber, k37_distMax);
-		System.out.printf("[%d번째 항목] 최소거리 : %f", k37_minnumber, k37_distMin);		
+		System.out.printf("[%d번째 항목] 설치장소 : [%s], 최대거리 : %f\n", k37_maxnumber,  maxspot, k37_distMax);
+		System.out.printf("[%d번째 항목] 설치장소 : [%s], 최소거리 : %f", k37_minnumber, mintspot, k37_distMin);		
 		// BufferedReader 종료
 		k37_br.close();
 	}

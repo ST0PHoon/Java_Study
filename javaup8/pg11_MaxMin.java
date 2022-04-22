@@ -70,9 +70,9 @@ public class pg11_MaxMin {
 		long k37_finishTime = System.currentTimeMillis();	//끝나는 시간 등록
         long k37_elapsedTime = k37_finishTime - k37_startTime;	//끝나는 시간과 처음시간의 차이로 돌리는 시간을 계산한다.
         // 시간과 파일 항목수 출력 구간
-        System.out.println("startTime(ms) : " + k37_startTime);
-        System.out.println("finishTime(ms) : " + k37_finishTime);
-        System.out.println("elapsedTime(ms) : " + k37_elapsedTime);
+        System.out.println("startTime(ms) : " + (k37_startTime));
+        System.out.println("finishTime(ms) : " + (k37_finishTime));
+        System.out.println("elapsedTime(걸리는시간) : " + (k37_elapsedTime) / 60000 + "분" + (int)(k37_elapsedTime / 1000) % 60 + "초");
         System.out.println("총 항목 개수 : " + k37_cnt);
         System.out.println("단축코드 2015년 이면서 삼성주식인 항목 개수 : " + k37_wcnt);
         
@@ -87,4 +87,15 @@ public class pg11_MaxMin {
 
 	}
 
+
 }
+
+
+
+
+
+
+
+
+
+
