@@ -31,6 +31,7 @@ public class pg35 {
 	public static void main(String[] args) {
 		// pg30 클래스의 ArrayList
 		k37_dataSet();	//데이터 세팅 메소드
+		k37_dataSort();
 		for ( int k37_i = 0; k37_i < k37_totalPages; k37_i++) {	//페이지수만큰 도는 for문 작성(현재7페이지)
 			k37_HeaderPrint(k37_i);	// 페이지 정보, 출력일자가 담긴 머릿글 출력
 			
