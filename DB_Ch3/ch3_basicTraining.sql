@@ -255,6 +255,10 @@ DECLARE lng double; # 현재 위치의 경도
 SET cutpage = _currentPage-1;
 SET pageSpot = _pageSpotNumber;
 SET lastpage = 1000/_pageSpotNumber;
+# 집 위도경도
+# SET lat = 37.4086523;
+# SET lng = 127.1281315;
+#학원 위도경도
 SET lat = 37.3860521; # 위도
 SET lng = 127.1214038; # 경도
 
