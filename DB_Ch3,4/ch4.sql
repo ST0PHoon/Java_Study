@@ -129,6 +129,7 @@ select
     (select count(*) from tupyo2 where kiho1 = 9 or kiho2 = 9 or kiho3 = 9) as "쯔위";
     
 #pg16
+#후보별로 득표수를 출력하는 select문 작성, kiho1,2,3이 모두 해당 후보의 번호와 동일하면 count한다.
 select
 	(select count(*) from tupyo2 where kiho1 = 1 or kiho2 = 1 or kiho3 = 1) as "나연",
 	(select count(*) from tupyo2 where kiho1 = 2 or kiho2 = 2 or kiho3 = 2) as "정연",
@@ -140,6 +141,7 @@ select
     (select count(*) from tupyo2 where kiho1 = 8 or kiho2 = 8 or kiho3 = 8) as "채영",
     (select count(*) from tupyo2 where kiho1 = 9 or kiho2 = 9 or kiho3 = 9) as "쯔위",
     (
+    #총 투표수를 총합으로 출력
 		(select count(*) from tupyo2 where kiho1 = 1 or kiho2 = 1 or kiho3 = 1) +
 		(select count(*) from tupyo2 where kiho1 = 2 or kiho2 = 2 or kiho3 = 2) +
 		(select count(*) from tupyo2 where kiho1 = 3 or kiho2 = 3 or kiho3 = 3) +
@@ -150,82 +152,93 @@ select
 		(select count(*) from tupyo2 where kiho1 = 8 or kiho2 = 8 or kiho3 = 8) +
 		(select count(*) from tupyo2 where kiho1 = 9 or kiho2 = 9 or kiho3 = 9)
     ) as 총합,
+    #2개만 중복이 있는 경우를 2중복으로 출력, 3개 중복이 있는 경우 3중복으로 출력
     (select count(*) from tupyo2 where kiho1=kiho2 or kiho1=kiho3 or kiho2=kiho3) as 2중복,
     (select count(*) from tupyo2 where kiho1 = kiho2 and kiho2 = kiho3 ) as 3중복;
     
 #pg17 
-drop table if exists examtable_ch4;
+drop table if exists examtable_ch4;	#동일한 테이블명이 있으면 삭제해라
+#선언 양식에 맞게 테이블을 생성해라
 create table examtable_ch4(
 	name varchar(20),
     id int not null primary key,
     kor int, eng int, mat int);
 desc examtable_ch4;
-
+# 테이블 안에 id의 값이 0초과인 값은 모두 삭제해라
 delete from examtable_ch4 where id > 0;
-
+#insert_examtable_ch4 프로시저를 삭제해라
 drop procedure if exists insert_examtable_ch4;
 DELIMITER $$
+#프로시저 선언, 반복할 수를 입력받는다.
 create procedure insert_examtable_ch4(_limit integer)
 begin
+#변수 선언
 declare _name varchar(20);
 declare _id integer;
-declare _cnt integer;
-set _cnt=0;
-	_loop: loop
-    set _cnt = _cnt+1;
-    set _name = concat("정지", cast(_cnt as char(4)));
-    set _id = 209900+ _cnt;
-    
+declare _cnt integer;	#카운트용
+set _cnt=0;	#카운트 변수에 1 입력
+	_loop: loop	#루프선언
+    set _cnt = _cnt+1;	#카운트에 1증가
+    set _name = concat("정지", cast(_cnt as char(4)));	#concat(병합),cast(변환)으로 이름 생성
+    set _id = 209900+ _cnt;	#학번 입력
+    # 위에서 선언한 값들과 랜덤(0부터99)까지의 값을 해당 테이블에 입력한다.
     insert into examtable_ch4 value (_name, _id, rand()*100,rand()*100,rand()*100);
-
+	#입력받은 수만큼 반복하고 루프문 종료
 	if _cnt = _limit then
 		leave _loop;
 	end if;
 	end loop _loop;
 end $$
-call insert_examtable_ch4(1000);
-select * from examtable_ch4;
+call insert_examtable_ch4(1000);	#1000명의 성적 입력
+select * from examtable_ch4;	# 실행결과 출력
 
 #pg18
+# exmview과 동일명의 view가 있으면 삭제한다.
 drop view if exists exmview;
+# exmview명의 뷰 생성(이름, 학번, 국어, 영어, 수학, 총점, 평균, 등수)
 create view exmview(name, id, kor, eng, mat, tot, ave, ran)
+#examtable_ch4(b) 테이블에서 전체(이름,학번,국어,영어,수학), 총점, 평균, 등수를 계산해서 view에 입력한다.
 	as select *, b.kor+b.eng+b.mat, (b.kor+b.eng+b.mat)/3, (
 		select count(*)+1 from examtable_ch4 as a where (a.kor+a.eng+a.mat) > (b.kor+b.eng+b.mat)
 			) from examtable_ch4 as b;
 
 #pg19
-select * from exmview;
-select name, ran from exmview;
+select * from exmview;	#뷰의 내용을 확인한다.
+select name, ran from exmview;	#뷰 내용중 name, ran을 확인한다.
 select * from exmview where ran >5;		# ran가 5초과인 값이 출력된다.
 insert into exmview values ("나연",309933,100,100,100,300,100,1); #값 추가 불가능
 
 #pg20
+# examtableEX 이 있으면 삭제
 drop table if exists examtableEX;
+# examtableEX 생성, id를 프라이머리 키로 설정
 create table examtableEX(
 	name varchar(20),
     id int not null primary key,
 	kor int, eng int, mat int, sum int, ave double, ranking int);
 desc examtableEX;
-# insert에 select 사용해서 값 넣기
+# insert에 select 사용해서 값 넣기, examtableEX에 전체(이름, 학번, 국어, 영어, 수학), 총점, 평균, 등수 입력
 insert into examtableEX
 	select *, b.kor+b.eng+b.mat, (b.kor+b.eng+b.mat)/3, (
 		select count(*)+1 from examtable_ch4 as a where (a.kor+a.eng+a.mat) > (b.kor+b.eng+b.mat)
     ) from examtable_ch4 as b;
-    
+#examtableEX 테이블에서 등수를 기준으로 내림차순해서 출력한다.
 select * from examtableEX order by ranking desc;
 
 
 #pg23
 # 실습하기 - 시험처리
 # 테이블 만들기
-use kopoctc;
-drop table if exists answer;
+use kopoctc;	# kopoctc 데이터베이스 접근
+drop table if exists answer;	#answer테이블이 있으면 삭제
+#answer테이블 생성, (학번(프라이머리키), 문제(1~20)까지 생성)
 create table answer (
    subjectID int not null primary key,
     a01 int, a02 int, a03 int, a04 int, a05 int, a06 int, a07 int, a08 int, a09 int, a10 int, 
     a11 int, a12 int, a13 int, a14 int, a15 int, a16 int, a17 int, a18 int, a19 int, a20 int);
     
-drop table if exists testing;
+drop table if exists testing;	#testing 테이블이 있으면 삭제
+#testing 테이블 생성, 학번(프라이머리키), 이름, 학번(프라이머리키), 문제(1~20)까지 생성)
 create table testing(
 	subjectID int not null,
     stu_name varchar(20),
@@ -234,7 +247,8 @@ create table testing(
     a11 int, a12 int, a13 int, a14 int, a15 int, a16 int, a17 int, a18 int, a19 int, a20 int,
     primary key(subjectID, stu_id));
     
-drop table if exists scoring;
+drop table if exists scoring;	#scoring 테이블이 있으면 삭제
+#scoring 테이블 생성, 학번(프라이머리키), 이름, 학번(프라이머리키), 문제(1~20), 점수 생성
 create table scoring(
 	subjectID int not null,
     stu_name varchar(20),
@@ -244,7 +258,8 @@ create table scoring(
     score int,
     primary key(subjectID, stu_id));
     
-drop table if exists reporttable;
+drop table if exists reporttable;	#reporttable 테이블이 있으면 삭제
+#reporttable 테이블 생성, 이름, 학번(프라이머리 키), 국어, 영어, 수학 생성
 create table reporttable(
     stu_name varchar(20),
     stu_id int not null primary key,
@@ -254,54 +269,62 @@ desc answer;
 desc testing;
 desc scoring;
 desc reporttable;
-# 답지 만들기
-delete from answer where subjectID > 0;
 
+# 답지 만들기
+# answer 테이블에 subjectID가 0보다 크면 삭제
+delete from answer where subjectID > 0;
+# 해당 프로시저가 있으면 삭제
 drop procedure if exists insert_answer;
 DELIMITER $$
-create procedure insert_answer(_subId integer)
+create procedure insert_answer(_subId integer) #insert_answer 프로시저 생성, 과목번호를 인수로 받는다.
 begin
+	#answer 테이블에 과목번호, 문제 정답(랜덤 - 1~5) 생성
 	insert into answer values (_subId, 
     rand()*4 + 1, rand()*4 + 1, rand()*4 + 1, rand()*4 + 1, rand()*4 + 1, rand()*4 + 1, rand()*4 + 1, rand()*4 + 1, rand()*4 + 1, rand()*4 + 1,
     rand()*4 + 1, rand()*4 + 1, rand()*4 + 1, rand()*4 + 1, rand()*4 + 1, rand()*4 + 1, rand()*4 + 1, rand()*4 + 1, rand()*4 + 1, rand()*4 + 1);
 end $$
-call insert_answer(1);
-call insert_answer(2);
-call insert_answer(3);
-# 시험자 1000명 넣기
-delete from examtable_ch4 where id > 0;
+call insert_answer(1);	#1번 과목(국어) 정답지 생성
+call insert_answer(2);	#2번 과목(영어) 정답지 생성
+call insert_answer(3);	#3번 과목(수학) 정답지 생성
 
+# 시험자 1000명 넣기
+#examtable_ch4 테이블의 id가 0보다 큰 값 모두 삭제
+delete from examtable_ch4 where id > 0;
+# 프로시저명이 동일한게 있으면 삭제
 drop procedure if exists insert_test;
 DELIMITER $$
+#과목번호와 인원수를 인수로 받는 프로시저 생성
 create procedure insert_test(_subId integer, _limit integer)
 begin
-    
+#변수 선언
 declare _name varchar(20);
 declare _id integer;
 declare _cnt integer;
-set _cnt=0;
-	_loop: loop
-    set _cnt = _cnt+1;
-    set _name = concat("정지", cast(_cnt as char(4)));
-    set _id = 209900+ _cnt;
-    
+set _cnt=0;	#카운트용 변수에 0입력
+	_loop: loop	#루프문 선언
+    set _cnt = _cnt+1;	#카운트 1증가
+    set _name = concat("정지", cast(_cnt as char(4)));	#concat(병합),cast(변환)으로 이름 생성
+    set _id = 209900+ _cnt;	#학번 입력
+    # testing 테이블에 과목번호, 이름, 학번, 선택한 답(1~5)를 입력한다.
     insert into testing values (_subId, _name, _id,
     rand()*4 + 1, rand()*4 + 1, rand()*4 + 1, rand()*4 + 1, rand()*4 + 1, rand()*4 + 1, rand()*4 + 1, rand()*4 + 1, rand()*4 + 1, rand()*4 + 1,
     rand()*4 + 1, rand()*4 + 1, rand()*4 + 1, rand()*4 + 1, rand()*4 + 1, rand()*4 + 1, rand()*4 + 1, rand()*4 + 1, rand()*4 + 1, rand()*4 + 1);
-
+	#입력받은 수 만큼 실행하고 루프문 종료
 	if _cnt = _limit then
 		leave _loop;
 	end if;
 	end loop _loop;
 end $$
-call insert_test(1,1000);
-call insert_test(2,1000);
-call insert_test(3,1000);
+call insert_test(1,1000);	#1과목(국어) 1000명분 실행
+call insert_test(2,1000);	#2과목(영어) 1000명분 실행
+call insert_test(3,1000);	#3과목(수학) 1000명분 실행
 
 #채점
+# scoring 테이블에 해당 값별로 원하는 값 입력
 insert into scoring (subjectID, stu_name, stu_id, a01, a02, a03, a04, a05, a06, a07, a08, a09, a10,
 											a11, a12, a13, a14, a15, a16, a17, a18, a19, a20, score) 
-select b.subjectID, b.stu_name, b.stu_id,
+select b.subjectID, b.stu_name, b.stu_id,	#과목번호, 이름, 학번 입력
+				#answer을 참고하여 문제별로 정답과 동일하면 1증가시키고 값을 입력한다.
 				(select count(*) from answer as a where a.a01 = b.a01 and a.subjectID = b.subjectID), 
                 (select count(*) from answer as a where a.a02 = b.a02 and a.subjectID = b.subjectID), 
                 (select count(*) from answer as a where a.a03 = b.a03 and a.subjectID = b.subjectID), 
@@ -322,7 +345,7 @@ select b.subjectID, b.stu_name, b.stu_id,
                 (select count(*) from answer as a where a.a18 = b.a18 and a.subjectID = b.subjectID), 
                 (select count(*) from answer as a where a.a19 = b.a19 and a.subjectID = b.subjectID), 
                 (select count(*) from answer as a where a.a20 = b.a20 and a.subjectID = b.subjectID),
-                (
+                (	#점수 계산하는 테이블 (한개당 5점)
 					(select count(*) from answer as a where a.a01 = b.a01 and a.subjectID = b.subjectID) +
 					(select count(*) from answer as a where a.a02 = b.a02 and a.subjectID = b.subjectID) + 
 					(select count(*) from answer as a where a.a03 = b.a03 and a.subjectID = b.subjectID) + 
@@ -346,18 +369,20 @@ select b.subjectID, b.stu_name, b.stu_id,
                 )*5
 from testing as b; 
 
-#리포트 테이블에 넣기
+#리포트 테이블에 넣기 (reporttable)
 insert into reporttable
-select distinct b.stu_name, b.stu_id, # 중복제거
+select distinct b.stu_name, b.stu_id, # distinct(중복제거)
+	#scoring(a,b)로 원하는 점수 입력, 과목번호가 동일하고 학번이 동일할 경우 해당 열의 score(b)를 kor, eng, mat로 입력한다.
 	(select a.score from scoring as a where a.subjectID = 1 and b.stu_id = a.stu_id ) as kor,
 	(select a.score from scoring as a where a.subjectID = 2 and b.stu_id = a.stu_id ) as eng,
     (select a.score from scoring as a where a.subjectID = 3 and b.stu_id = a.stu_id ) as mat
 from scoring as b;
 
 #최종 리포트
+#reporttable(b)에서 전체(이름, 학번, 국어, 영어, 수학), 성적합을 sum으로 성적평균을 ave로 등수를 ranking(b의 성적합이 a의 성접합보다 작을 경우 count증가 + 1)으로 출력한다.
 select *, (b.kor+b.eng+b.mat) as sum, (b.kor+b.eng+b.mat)/3 as ave,
 	(select count(*) + 1 from reporttable as a where (a.kor + a.eng + a.mat) > (b.kor + b.eng + b.mat)) as ranking from reporttable as b
-		order by ranking;
+		order by ranking;	#등수를 기준으로 오름차순정렬한다.
         
 #마지막으로 각 과목별,문제별 득점자수와 득점률 리포트를 작성하시오. 수정중
 # 득점자수 수정중 수정중 수정중 수정중 수정중 수정중 수정중 수정중 수정중 수정중 수정중 수정중 수정중 수정중 수정중 수정중 수정중 수정중 수정중 수정중 
