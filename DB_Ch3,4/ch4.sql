@@ -15,7 +15,8 @@ create table tupyo(
 desc tupyo;
 
 #pg7
-delete from hubo where kiho >0;
+delete from hubo where kiho >0;		#기존에 있던 hubo 테이블에서 kiho가 0이상인 값 삭제
+# 후보별 번호, 이름, 공약 입력
 insert into hubo values (1, "나연", "넷플릭스 무료");
 insert into hubo values (2, "정연", "대중교통 24시간 운행");
 insert into hubo values (3, "모모", "재택근무");
@@ -25,88 +26,107 @@ insert into hubo values (6, "미나", "사람 살기 좋은 세상");
 insert into hubo values (7, "다현", "유튜브 프라임 무료");
 insert into hubo values (8, "채영", "누워서 게임할 수 있는 환경 제공");
 insert into hubo values (9, "쯔위", "배달비 무료");
+# kiho를 기호로, name을 성명으로, gongyak을 공약으로 hubo를 참조하여 출력
 select kiho as 기호, name as 성명, gongyak as 공약 from hubo;
 
 #pg8
+#기존에 있던 tupyo 테이블에서 kiho가 0이상인 값 삭제
 delete from tupyo where kiho>0;
+# insert_tupyo 프로시저 삭제
 drop procedure if exists insert_tupyo;
+# insert_tupyo프로시저 선언, _limit(정수형)을 인수로 받는다.
 delimiter $$
 create procedure insert_tupyo(_limit integer)
 begin
-declare _cnt integer;
-set _cnt=0;
-	_loop: loop
-		set _cnt=_cnt+1;
+declare _cnt integer;	#카운트용 변수 선언
+set _cnt=0;	#변수에 0입력
+	_loop: loop	#루프선언
+		set _cnt=_cnt+1;	 #카운트변수에 1증가
+        #tupyo 테이블에 rand()*8+1 2개입력, 하나는 선택한 후보, 하나는 연력대 (1부터9까지 랜덤 생성)
         insert into tupyo value (rand()*8+1, rand()*8+1);
+        # 입력받은 인수 만큼 실행하고 루프문 종료하는 if선언
         if _cnt = _limit then
 			leave _loop;
 		end if;
 	end loop _loop;
 end $$
-call insert_tupyo(1000);
-select kiho as 투표한기호, age as 투표자연령대 from tupyo;
+call insert_tupyo(1000);	#1000명의 투표자 (선택후보, 연령)을 입력한다.
+#tupyo 테이블에서 kiho를 투표한 기호, age를 투표자연력으로 출력한다.
+select kiho as 투표한기호, age as 투표자연령대 from tupyo;	
 
 #pg9
+# kiho를 기호로, name을 성명으로, gongyak을 공약으로 hubo를 참조하여 출력
 select kiho as 기호, name as 성명, gongyak as 공약 from hubo;
+#tupyo 테이블에서 kiho를 투표한 기호, age를 투표자연력으로 출력한다.
 select kiho as 투표한기호, age as 투표자연령대 from tupyo;
 
 #pg10
+# tupyo 테이블에서 기호를 기준으로, 기호와 기호 개수를 출력한다.
 select kiho, count(*) from tupyo group by kiho;
 
 #pg11
+# tupyo를 a, hubo를 b로 선언후 join, a와 b의 kiho가 동일할 경우, a의 kiho를 기준으로 묶어서
+# b의 name을 후보, b의 gongyak을 공약, a의 기호수를 득표로 출력한다.
 select b.name as 후보, b.gongyak as 공약, count(a.kiho) as 득표 from tupyo as a, hubo as b 
 												where a.kiho = b.kiho group by a.kiho;
                                                 
 #pg12
+# tupyo 테이블을 a로 칭하고, a의 kiho를 기준으로 묶어서, hubo테이블의 kiho와 a의 kiho가 똑같은 경우에 hubo의 name을 출력
+# hubo테이블의 kiho와 a의 kiho가 똑같은 경우에 hubo의 gongyak을 출력, a의 kiho수를 출력한다.
 select (select name from hubo where kiho = a.kiho), (select gongyak from hubo where kiho = a.kiho), 
 														count(a.kiho) from tupyo as a group by a.kiho;
 
 #pg13
-drop table if exists tupyo2;
+drop table if exists tupyo2;	#기존에 있던 tupyo2테이블을 삭제한다.
+# tupyo2 테이블을 생성한다.(kiho1, kiho2, kiho3, age)를 가진다.
 create table tupyo2(kiho1 int, kiho2 int, kiho3 int, age int);
 desc tupyo2;
-
+# 기존에 있던 insert_tupyo2 프로시저를 
 drop procedure if exists insert_tupyo2;
 delimiter $$
-create procedure insert_tupyo2(_limit integer)
+create procedure insert_tupyo2(_limit integer)	#몇번 돌릴지 인수로 받는 프로시저 선언
 begin
-declare _cnt integer;
-set _cnt=0;
-	_loop: loop
-		set _cnt=_cnt+1;
+declare _cnt integer;	#카운트용 변수 선언
+set _cnt=0;	# 변수에 0 입력
+	_loop: loop	#루프문 선언
+		set _cnt=_cnt+1;	#카운트에 1 증가
+        # tupyo2테이블에 연령, 후보1, 후보2, 후보3 입력
         insert into tupyo2 value (rand()*8+1, rand()*8+1, rand()*8+1, rand()*8+1);
+        # 입력받은 수 만큼 루프문 돌고 종료
         if _cnt = _limit then
 			leave _loop;
 		end if;
 	end loop _loop;
 end $$
-call insert_tupyo2(1000);
-select * from tupyo2;
+call insert_tupyo2(1000);	#1000명의 투표실행
+select * from tupyo2;	#결과 출력
 
 #pg14
 #1방법
+# tupyo2(a),hubo(h1, h2, h3) 로 join, kiho1과 h1의 kiho가 같고, kiho2와 h2의 kiho가 같고, kiho3와 h3의 kiho가 같으면
+# tupyo2의 이름, h1의 이름을 투표1로, h2의 이름을 투표2로, h3의 이름을 투표3로 출력한다.
 select a.age, h1.name as 투표1, h2.name as 투표2, h3.name as 투표3
 	from tupyo2 as a, hubo as h1, hubo as h2, hubo as h3
 	where a.kiho1 = h1.kiho and a.kiho2 = h2.kiho and a.kiho3 = h3.kiho;
 #2방법
-select 
-	a.age,
+# tupyo2(a)에 대해서 나이, hubo의 kiho가 kiho1, 2, 3과 동일할 경우 투표1, 투표2, 투표3으로 출력
+select a.age,
 	(select name from hubo where a.kiho1 = kiho) as "투표1",
 	(select name from hubo where a.kiho2 = kiho) as "투표2",
 	(select name from hubo where a.kiho3 = kiho) as "투표3"
 from tupyo2 as a;
 
-#pg15
+#pg15, 후보별로 득표수를 출력하는 select문 작성, kiho1,2,3이 모두 해당 후보의 번호와 동일하면 count한다.
 select
 	(select count(*) from tupyo2 where kiho1 = 1 or kiho2 = 1 or kiho3 = 1) as "나연",
 	(select count(*) from tupyo2 where kiho1 = 2 or kiho2 = 2 or kiho3 = 2) as "정연",
-    (select count(*) from tupyo2 where kiho1 = 3 or kiho2 = 1 or kiho3 = 1) as "모모",
-    (select count(*) from tupyo2 where kiho1 = 4 or kiho2 = 1 or kiho3 = 1) as "사나",
-    (select count(*) from tupyo2 where kiho1 = 5 or kiho2 = 1 or kiho3 = 1) as "지효",
-    (select count(*) from tupyo2 where kiho1 = 6 or kiho2 = 1 or kiho3 = 1) as "미나",
-    (select count(*) from tupyo2 where kiho1 = 7 or kiho2 = 1 or kiho3 = 1) as "다현",
-    (select count(*) from tupyo2 where kiho1 = 8 or kiho2 = 1 or kiho3 = 1) as "채영",
-    (select count(*) from tupyo2 where kiho1 = 9 or kiho2 = 1 or kiho3 = 1) as "쯔위";
+    (select count(*) from tupyo2 where kiho1 = 3 or kiho2 = 3 or kiho3 = 3) as "모모",
+    (select count(*) from tupyo2 where kiho1 = 4 or kiho2 = 4 or kiho3 = 4) as "사나",
+    (select count(*) from tupyo2 where kiho1 = 5 or kiho2 = 5 or kiho3 = 5) as "지효",
+    (select count(*) from tupyo2 where kiho1 = 6 or kiho2 = 6 or kiho3 = 6) as "미나",
+    (select count(*) from tupyo2 where kiho1 = 7 or kiho2 = 7 or kiho3 = 7) as "다현",
+    (select count(*) from tupyo2 where kiho1 = 8 or kiho2 = 8 or kiho3 = 8) as "채영",
+    (select count(*) from tupyo2 where kiho1 = 9 or kiho2 = 9 or kiho3 = 9) as "쯔위";
     
 #pg16
 select
@@ -405,31 +425,31 @@ create table reservation (
 #임의 값 넣기
 insert into reservation values ("정연","2022-05-26",1,"서울","010-0101-0101","나연","따뜻한방 주세요",DATE_FORMAT(NOW(),'%Y-%m-%d'));
 insert into reservation values ("모모","2022-05-27",1,"서울","010-0101-0101","나연","따뜻한방 주세요",DATE_FORMAT(NOW(),'%Y-%m-%d'));
-insert into reservation values ("모모","2022-05-27",2,"서울","010-0101-0101","나연","따뜻한방 주세요",DATE_FORMAT(NOW(),'%Y-%m-%d'));
-insert into reservation values ("다현","2022-05-29",2,"서울","010-0101-0101","나연","따뜻한방 주세요",DATE_FORMAT(NOW(),'%Y-%m-%d'));
+insert into reservation values ("모모","2022-05-29",1,"서울","010-0101-0101","나연","따뜻한방 주세요",DATE_FORMAT(NOW(),'%Y-%m-%d'));
 insert into reservation values ("채영","2022-05-30",1,"서울","010-0101-0101","나연","따뜻한방 주세요",DATE_FORMAT(NOW(),'%Y-%m-%d'));
 insert into reservation values ("정연","2022-06-01",1,"서울","010-0101-0101","나연","따뜻한방 주세요",DATE_FORMAT(NOW(),'%Y-%m-%d'));
 insert into reservation values ("모모","2022-06-02",1,"서울","010-0101-0101","나연","따뜻한방 주세요",DATE_FORMAT(NOW(),'%Y-%m-%d'));
 insert into reservation values ("사나","2022-06-03",1,"서울","010-0101-0101","나연","따뜻한방 주세요",DATE_FORMAT(NOW(),'%Y-%m-%d'));
 insert into reservation values ("지효","2022-06-04",1,"서울","010-0101-0101","나연","따뜻한방 주세요",DATE_FORMAT(NOW(),'%Y-%m-%d'));
-insert into reservation values ("지효","2022-06-04",2,"서울","010-0101-0101","나연","따뜻한방 주세요",DATE_FORMAT(NOW(),'%Y-%m-%d'));
 insert into reservation values ("나연","2022-06-05",1,"서울","010-0101-0101","나연","따뜻한방 주세요",DATE_FORMAT(NOW(),'%Y-%m-%d'));
 insert into reservation values ("정연","2022-06-06",1,"서울","010-0101-0101","나연","따뜻한방 주세요",DATE_FORMAT(NOW(),'%Y-%m-%d'));
 insert into reservation values ("모모","2022-06-10",1,"서울","010-0101-0101","나연","따뜻한방 주세요",DATE_FORMAT(NOW(),'%Y-%m-%d'));
 insert into reservation values ("사나","2022-06-11",1,"서울","010-0101-0101","나연","따뜻한방 주세요",DATE_FORMAT(NOW(),'%Y-%m-%d'));
 insert into reservation values ("지효","2022-06-12",1,"서울","010-0101-0101","나연","따뜻한방 주세요",DATE_FORMAT(NOW(),'%Y-%m-%d'));
-insert into reservation values ("지효","2022-06-12",3,"서울","010-0101-0101","나연","따뜻한방 주세요",DATE_FORMAT(NOW(),'%Y-%m-%d'));
 insert into reservation values ("나연","2022-06-13",1,"서울","010-0101-0101","나연","따뜻한방 주세요",DATE_FORMAT(NOW(),'%Y-%m-%d'));
 insert into reservation values ("정연","2022-06-14",1,"서울","010-0101-0101","나연","따뜻한방 주세요",DATE_FORMAT(NOW(),'%Y-%m-%d'));
 insert into reservation values ("모모","2022-06-15",1,"서울","010-0101-0101","나연","따뜻한방 주세요",DATE_FORMAT(NOW(),'%Y-%m-%d'));
 insert into reservation values ("사나","2022-06-16",1,"서울","010-0101-0101","나연","따뜻한방 주세요",DATE_FORMAT(NOW(),'%Y-%m-%d'));
-insert into reservation values ("지효","2022-06-17",2,"서울","010-0101-0101","나연","따뜻한방 주세요",DATE_FORMAT(NOW(),'%Y-%m-%d'));
 insert into reservation values ("나연","2022-06-18",1,"서울","010-0101-0101","나연","따뜻한방 주세요",DATE_FORMAT(NOW(),'%Y-%m-%d'));
 insert into reservation values ("모모","2022-06-28",1,"서울","010-0101-0101","나연","따뜻한방 주세요",DATE_FORMAT(NOW(),'%Y-%m-%d'));
 insert into reservation values ("사나","2022-06-29",1,"서울","010-0101-0101","나연","따뜻한방 주세요",DATE_FORMAT(NOW(),'%Y-%m-%d'));
-insert into reservation values ("지효","2022-06-29",3,"서울","010-0101-0101","나연","따뜻한방 주세요",DATE_FORMAT(NOW(),'%Y-%m-%d'));
 insert into reservation values ("나연","2022-06-30",1,"서울","010-0101-0101","나연","따뜻한방 주세요",DATE_FORMAT(NOW(),'%Y-%m-%d'));
-
+insert into reservation values ("모모","2022-05-27",2,"서울","010-0101-0101","나연","따뜻한방 주세요",DATE_FORMAT(NOW(),'%Y-%m-%d'));
+#insert into reservation values ("다현","2022-05-29",2,"서울","010-0101-0101","나연","따뜻한방 주세요",DATE_FORMAT(NOW(),'%Y-%m-%d'));
+insert into reservation values ("지효","2022-06-04",2,"서울","010-0101-0101","나연","따뜻한방 주세요",DATE_FORMAT(NOW(),'%Y-%m-%d'));
+insert into reservation values ("지효","2022-06-17",2,"서울","010-0101-0101","나연","따뜻한방 주세요",DATE_FORMAT(NOW(),'%Y-%m-%d'));
+insert into reservation values ("지효","2022-06-12",3,"서울","010-0101-0101","나연","따뜻한방 주세요",DATE_FORMAT(NOW(),'%Y-%m-%d'));
+insert into reservation values ("지효","2022-06-29",3,"서울","010-0101-0101","나연","따뜻한방 주세요",DATE_FORMAT(NOW(),'%Y-%m-%d'));
 
 #1달간 예약보기 위한 프로시저
 drop procedure if exists resvstat_calc;
@@ -443,7 +463,6 @@ begin
     declare _room3 varchar(20);
     
 	set _date=now();
-    set _cnt =0;
 	##################################################################################################
     drop table if  exists reserv_stat;
     create table reserv_stat(

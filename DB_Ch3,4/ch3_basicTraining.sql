@@ -138,7 +138,7 @@ call print_rank_order( );
 DROP PROCEDURE IF EXISTS input_data;
 DELIMITER $$
 CREATE PROCEDURE input_data(_last integer) #입력할 학생수를 인수로 받는다.
-BEGIN
+BEGIN 
 	DECLARE i INT DEFAULT 1;	#i의 기본값을 1로 설정
     while i <= _last do	#설정한 인원수 만큼 도는 while문 작성
 		insert into votetable (name, age) VALUES (round((rand()*8 + 1),0), (rand()*8)+1);	#votetable에 이름(1~9, 트와이스 맴버, 변경할 예정), 연령대(투표인원의 연령)을 입력
@@ -279,5 +279,3 @@ from freewifi2  limit start_number, pageSpot;
 END $$
 # 25개씩 출력할때 5페이지의 내용
 call freeWifi_report(5, 25);
-
-
