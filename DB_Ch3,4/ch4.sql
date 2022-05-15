@@ -452,7 +452,7 @@ insert into reservation values ("정연","2022-05-26",1,"서울","010-0101-0101"
 insert into reservation values ("모모","2022-05-27",1,"서울","010-0101-0101","나연","따뜻한방 주세요",DATE_FORMAT(NOW(),'%Y-%m-%d'));
 insert into reservation values ("모모","2022-05-29",1,"서울","010-0101-0101","나연","따뜻한방 주세요",DATE_FORMAT(NOW(),'%Y-%m-%d'));
 insert into reservation values ("채영","2022-05-30",1,"서울","010-0101-0101","나연","따뜻한방 주세요",DATE_FORMAT(NOW(),'%Y-%m-%d'));
-insert into reservation values ("정연","2022-06-01",1,"서울","010-0101-0101","나연","따뜻한방 주세요",DATE_FORMAT(NOW(),'%Y-%m-%d'));
+insert into reservation values ("정연","2022-06-01",2,"서울","010-0101-0101","나연","따뜻한방 주세요",DATE_FORMAT(NOW(),'%Y-%m-%d'));
 insert into reservation values ("모모","2022-06-02",1,"서울","010-0101-0101","나연","따뜻한방 주세요",DATE_FORMAT(NOW(),'%Y-%m-%d'));
 insert into reservation values ("사나","2022-06-03",1,"서울","010-0101-0101","나연","따뜻한방 주세요",DATE_FORMAT(NOW(),'%Y-%m-%d'));
 insert into reservation values ("지효","2022-06-04",1,"서울","010-0101-0101","나연","따뜻한방 주세요",DATE_FORMAT(NOW(),'%Y-%m-%d'));
@@ -470,7 +470,7 @@ insert into reservation values ("모모","2022-06-28",1,"서울","010-0101-0101"
 insert into reservation values ("사나","2022-06-29",1,"서울","010-0101-0101","나연","따뜻한방 주세요",DATE_FORMAT(NOW(),'%Y-%m-%d'));
 insert into reservation values ("나연","2022-06-30",1,"서울","010-0101-0101","나연","따뜻한방 주세요",DATE_FORMAT(NOW(),'%Y-%m-%d'));
 insert into reservation values ("모모","2022-05-27",2,"서울","010-0101-0101","나연","따뜻한방 주세요",DATE_FORMAT(NOW(),'%Y-%m-%d'));
-#insert into reservation values ("다현","2022-05-29",2,"서울","010-0101-0101","나연","따뜻한방 주세요",DATE_FORMAT(NOW(),'%Y-%m-%d'));
+insert into reservation values ("다현","2022-05-29",2,"서울","010-0101-0101","나연","따뜻한방 주세요",DATE_FORMAT(NOW(),'%Y-%m-%d'));
 insert into reservation values ("지효","2022-06-04",2,"서울","010-0101-0101","나연","따뜻한방 주세요",DATE_FORMAT(NOW(),'%Y-%m-%d'));
 insert into reservation values ("지효","2022-06-17",2,"서울","010-0101-0101","나연","따뜻한방 주세요",DATE_FORMAT(NOW(),'%Y-%m-%d'));
 insert into reservation values ("지효","2022-06-12",3,"서울","010-0101-0101","나연","따뜻한방 주세요",DATE_FORMAT(NOW(),'%Y-%m-%d'));
@@ -495,14 +495,15 @@ begin
         room1 varchar(20),
         room2 varchar(20),
         room3 varchar(20),
-		primary key(reserve_date));
+		primary key(reserve_date)
+        );
 	##################################################################################################
     #테이블을 돌면서 날짜가 똑같고 room 넘버가 동일하면 이름을 입력해라.
     insert into reserv_stat
     select distinct b.reserve_date,
-		(select ifnull((select b.name from reservation as a where b.reserve_date = a.reserve_date and 1 = a.room), '예약가능')),
-		(select ifnull((select b.name from reservation as a where b.reserve_date = a.reserve_date and 2 = a.room), '예약가능')),
-		(select ifnull((select b.name from reservation as a where b.reserve_date = a.reserve_date and 3 = a.room), '예약가능'))
+		(select ifnull((select a1.name from reservation as a1 where b.reserve_date = a1.reserve_date and 1 = a1.room), '예약가능')),
+		(select ifnull((select a2.name from reservation as a2 where b.reserve_date = a2.reserve_date and 2 = a2.room), '예약가능')),
+		(select ifnull((select a3.name from reservation as a3 where b.reserve_date = a3.reserve_date and 3 = a3.room), '예약가능'))
 	from reservation as b
     where b.reserve_date BETWEEN DATE_FORMAT(NOW(),'%Y-%m-%d') AND DATE_FORMAT(DATE_ADD(NOW(), INTERVAL 1 MONTH),'%Y-%m-%d'); 
 	##################################################################################################
