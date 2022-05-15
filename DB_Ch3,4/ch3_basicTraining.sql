@@ -244,7 +244,8 @@ DROP PROCEDURE IF EXISTS freeWifi_report;
 DELIMITER $$
 CREATE PROCEDURE freeWifi_report(_currentPage int, _pageSpotNumber int)		#현재 페이지와 페이지당 지점수를 인수로 받는다.
 BEGIN
-DECLARE start_number int;	#
+#변수 선언
+DECLARE start_number int;
 DECLARE page_last_number int;
 DECLARE cutpage int;
 DECLARE pageSpot int;
@@ -252,32 +253,31 @@ DECLARE lastpage int;
 DECLARE lat double; # 현재 위치의 위도
 DECLARE lng double; # 현재 위치의 경도
 
-SET cutpage = _currentPage-1;
-SET pageSpot = _pageSpotNumber;
-SET lastpage = 1000/_pageSpotNumber;
+SET cutpage = _currentPage-1;		# 현재 페이지 계산 변수
+SET pageSpot = _pageSpotNumber;		# 현재 페이지 장소 개수
+SET lastpage = ceiling(1000/pageSpot);	#마지막 페이지
 # 집 위도경도
-# SET lat = 37.4086523;
-# SET lng = 127.1281315;
+SET lat = 37.4086523;
+SET lng = 127.1281315;
 #학원 위도경도
-SET lat = 37.3860521; # 위도
-SET lng = 127.1214038; # 경도
-
+# SET lat = 37.3860521; # 위도
+# SET lng = 127.1214038; # 경도
+# 첫페이지, 마지막페이지 보다 크거나 작을 때 페이지 보정
 IF cutpage < 1 THEN
    SET cutpage = 1;
 END IF;
 IF cutpage  > lastpage  THEN
    SET cutpage = lastpage;
 END IF;
-
+# 페이지의 첫 시작 지점 계산
 SET start_number = cutpage * pageSpot;
-SET page_last_number = (cutpage+ 1) * (pageSpot);
-set @rownum:= start_number;
-
+set @rownum:= start_number;	# 원본테이블에서 값을 불러올때 넘버링 하는 변수
 # 주소, 위도, 경도, 거리 출력
 select @rownum:= @rownum + 1 as 번호, place_addr_road as 주소, latitude as 위도, longitude as 경도,
-      (6371 * acos( cos( radians( lat ) ) * cos( radians( latitude) ) * cos( radians( longitude) - radians( lng )) + sin( radians(lat) ) * sin( radians(latitude) ) ) ) AS 거리 from freewifi2  limit start_number, pageSpot;
+      (6371 * acos( cos( radians( lat ) ) * cos( radians( latitude) ) * cos( radians( longitude) - radians( lng )) + sin( radians(lat) ) * sin( radians(latitude) ) ) ) AS 거리
+from freewifi2  limit start_number, pageSpot;
 END $$
-
+# 25개씩 출력할때 5페이지의 내용
 call freeWifi_report(5, 25);
 
 

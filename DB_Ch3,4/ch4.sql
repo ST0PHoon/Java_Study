@@ -1,4 +1,4 @@
-#pg5 ~
+#pg5 ~ 이건 워크밴치에서 수동으로 생성해 볼것
 drop table if exists hubo;
 create table hubo(
 	kiho int not null,
@@ -324,5 +324,147 @@ select b.subjectID, b.stu_name, b.stu_id,
 					(select count(*) from answer as a where a.a19 = b.a19 and a.subjectID = b.subjectID) +
 					(select count(*) from answer as a where a.a20 = b.a20 and a.subjectID = b.subjectID)
                 )*5
-                from testing as b; 
+from testing as b; 
+
+#리포트 테이블에 넣기
+insert into reporttable
+select distinct b.stu_name, b.stu_id, # 중복제거
+	(select a.score from scoring as a where a.subjectID = 1 and b.stu_id = a.stu_id ) as kor,
+	(select a.score from scoring as a where a.subjectID = 2 and b.stu_id = a.stu_id ) as eng,
+    (select a.score from scoring as a where a.subjectID = 3 and b.stu_id = a.stu_id ) as mat
+from scoring as b;
+
+#최종 리포트
+select *, (b.kor+b.eng+b.mat) as sum, (b.kor+b.eng+b.mat)/3 as ave,
+	(select count(*) + 1 from reporttable as a where (a.kor + a.eng + a.mat) > (b.kor + b.eng + b.mat)) as ranking from reporttable as b
+		order by ranking;
+        
+#마지막으로 각 과목별,문제별 득점자수와 득점률 리포트를 작성하시오. 수정중
+# 득점자수 수정중 수정중 수정중 수정중 수정중 수정중 수정중 수정중 수정중 수정중 수정중 수정중 수정중 수정중 수정중 수정중 수정중 수정중 수정중 수정중 
+drop procedure if exists create_score_list;
+DELIMITER $$
+create procedure create_score_list()
+begin
+declare _cnt_sub int;
+
+drop table score_list;
+create table score_list (
+	subjectId int,
+    q_number varchar(10),
+    correct_num int,
+    correct_rate double);
+
+ set _cnt_sub=0;
+
+	_loop2: loop
+	 set _cnt_sub=_cnt_sub+1;
+		insert into score_list select subjectID, 'a01', count(*), count(*)/10 from scoring where subjectID = _cnt_sub and a01 = 1;
+		insert into score_list select subjectID, 'a02', count(*), count(*)/10 from scoring where subjectID = _cnt_sub and a02 = 1;
+		insert into score_list select subjectID, 'a03', count(*), count(*)/10 from scoring where subjectID = _cnt_sub and a03 = 1;
+		insert into score_list select subjectID, 'a04', count(*), count(*)/10 from scoring where subjectID = _cnt_sub and a04 = 1;
+        insert into score_list select subjectID, 'a05', count(*), count(*)/10 from scoring where subjectID = _cnt_sub and a05 = 1;
+		insert into score_list select subjectID, 'a06', count(*), count(*)/10 from scoring where subjectID = _cnt_sub and a06 = 1;
+        insert into score_list select subjectID, 'a07', count(*), count(*)/10 from scoring where subjectID = _cnt_sub and a07 = 1;
+		insert into score_list select subjectID, 'a08', count(*), count(*)/10 from scoring where subjectID = _cnt_sub and a08 = 1;
+        insert into score_list select subjectID, 'a09', count(*), count(*)/10 from scoring where subjectID = _cnt_sub and a09 = 1;
+		insert into score_list select subjectID, 'a10', count(*), count(*)/10 from scoring where subjectID = _cnt_sub and a10 = 1;
+        insert into score_list select subjectID, 'a11', count(*), count(*)/10 from scoring where subjectID = _cnt_sub and a11 = 1;
+		insert into score_list select subjectID, 'a12', count(*), count(*)/10 from scoring where subjectID = _cnt_sub and a12 = 1;
+        insert into score_list select subjectID, 'a13', count(*), count(*)/10 from scoring where subjectID = _cnt_sub and a13 = 1;
+		insert into score_list select subjectID, 'a14', count(*), count(*)/10 from scoring where subjectID = _cnt_sub and a14 = 1;
+        insert into score_list select subjectID, 'a15', count(*), count(*)/10 from scoring where subjectID = _cnt_sub and a15 = 1;
+		insert into score_list select subjectID, 'a16', count(*), count(*)/10 from scoring where subjectID = _cnt_sub and a16 = 1;
+        insert into score_list select subjectID, 'a17', count(*), count(*)/10 from scoring where subjectID = _cnt_sub and a17 = 1;
+		insert into score_list select subjectID, 'a18', count(*), count(*)/10 from scoring where subjectID = _cnt_sub and a18 = 1;
+        insert into score_list select subjectID, 'a19', count(*), count(*)/10 from scoring where subjectID = _cnt_sub and a19 = 1;
+		insert into score_list select subjectID, 'a20', count(*), count(*)/10 from scoring where subjectID = _cnt_sub and a20 = 1;
+        
+		if _cnt_sub = 3 then
+			leave _loop2;
+		end if;
+	end loop _loop2;
+
+select subjectId as 과목, q_number as 문제, correct_num as 득점자, correct_rate as 득점률 from score_list ;
+end $$
+call create_score_list();
+
+
+
+#리조트
+#reservation table
+drop table reservation;
+create table reservation (
+	name varchar(10),
+    reserve_date date,
+    room int,
+    addr varchar(100),
+    tel varchar(20),
+    ipgum_name varchar(10),
+    memo varchar(100),
+    input_date date);
+#임의 값 넣기
+insert into reservation values ("정연","2022-05-26",1,"서울","010-0101-0101","나연","따뜻한방 주세요",DATE_FORMAT(NOW(),'%Y-%m-%d'));
+insert into reservation values ("모모","2022-05-27",1,"서울","010-0101-0101","나연","따뜻한방 주세요",DATE_FORMAT(NOW(),'%Y-%m-%d'));
+insert into reservation values ("모모","2022-05-27",2,"서울","010-0101-0101","나연","따뜻한방 주세요",DATE_FORMAT(NOW(),'%Y-%m-%d'));
+insert into reservation values ("다현","2022-05-29",2,"서울","010-0101-0101","나연","따뜻한방 주세요",DATE_FORMAT(NOW(),'%Y-%m-%d'));
+insert into reservation values ("채영","2022-05-30",1,"서울","010-0101-0101","나연","따뜻한방 주세요",DATE_FORMAT(NOW(),'%Y-%m-%d'));
+insert into reservation values ("정연","2022-06-01",1,"서울","010-0101-0101","나연","따뜻한방 주세요",DATE_FORMAT(NOW(),'%Y-%m-%d'));
+insert into reservation values ("모모","2022-06-02",1,"서울","010-0101-0101","나연","따뜻한방 주세요",DATE_FORMAT(NOW(),'%Y-%m-%d'));
+insert into reservation values ("사나","2022-06-03",1,"서울","010-0101-0101","나연","따뜻한방 주세요",DATE_FORMAT(NOW(),'%Y-%m-%d'));
+insert into reservation values ("지효","2022-06-04",1,"서울","010-0101-0101","나연","따뜻한방 주세요",DATE_FORMAT(NOW(),'%Y-%m-%d'));
+insert into reservation values ("지효","2022-06-04",2,"서울","010-0101-0101","나연","따뜻한방 주세요",DATE_FORMAT(NOW(),'%Y-%m-%d'));
+insert into reservation values ("나연","2022-06-05",1,"서울","010-0101-0101","나연","따뜻한방 주세요",DATE_FORMAT(NOW(),'%Y-%m-%d'));
+insert into reservation values ("정연","2022-06-06",1,"서울","010-0101-0101","나연","따뜻한방 주세요",DATE_FORMAT(NOW(),'%Y-%m-%d'));
+insert into reservation values ("모모","2022-06-10",1,"서울","010-0101-0101","나연","따뜻한방 주세요",DATE_FORMAT(NOW(),'%Y-%m-%d'));
+insert into reservation values ("사나","2022-06-11",1,"서울","010-0101-0101","나연","따뜻한방 주세요",DATE_FORMAT(NOW(),'%Y-%m-%d'));
+insert into reservation values ("지효","2022-06-12",1,"서울","010-0101-0101","나연","따뜻한방 주세요",DATE_FORMAT(NOW(),'%Y-%m-%d'));
+insert into reservation values ("지효","2022-06-12",3,"서울","010-0101-0101","나연","따뜻한방 주세요",DATE_FORMAT(NOW(),'%Y-%m-%d'));
+insert into reservation values ("나연","2022-06-13",1,"서울","010-0101-0101","나연","따뜻한방 주세요",DATE_FORMAT(NOW(),'%Y-%m-%d'));
+insert into reservation values ("정연","2022-06-14",1,"서울","010-0101-0101","나연","따뜻한방 주세요",DATE_FORMAT(NOW(),'%Y-%m-%d'));
+insert into reservation values ("모모","2022-06-15",1,"서울","010-0101-0101","나연","따뜻한방 주세요",DATE_FORMAT(NOW(),'%Y-%m-%d'));
+insert into reservation values ("사나","2022-06-16",1,"서울","010-0101-0101","나연","따뜻한방 주세요",DATE_FORMAT(NOW(),'%Y-%m-%d'));
+insert into reservation values ("지효","2022-06-17",2,"서울","010-0101-0101","나연","따뜻한방 주세요",DATE_FORMAT(NOW(),'%Y-%m-%d'));
+insert into reservation values ("나연","2022-06-18",1,"서울","010-0101-0101","나연","따뜻한방 주세요",DATE_FORMAT(NOW(),'%Y-%m-%d'));
+insert into reservation values ("모모","2022-06-28",1,"서울","010-0101-0101","나연","따뜻한방 주세요",DATE_FORMAT(NOW(),'%Y-%m-%d'));
+insert into reservation values ("사나","2022-06-29",1,"서울","010-0101-0101","나연","따뜻한방 주세요",DATE_FORMAT(NOW(),'%Y-%m-%d'));
+insert into reservation values ("지효","2022-06-29",3,"서울","010-0101-0101","나연","따뜻한방 주세요",DATE_FORMAT(NOW(),'%Y-%m-%d'));
+insert into reservation values ("나연","2022-06-30",1,"서울","010-0101-0101","나연","따뜻한방 주세요",DATE_FORMAT(NOW(),'%Y-%m-%d'));
+
+
+#1달간 예약보기 위한 프로시저
+drop procedure if exists resvstat_calc;
+delimiter $$
+create procedure resvstat_calc()
+begin
+	declare _date date;
+    declare _cnt integer;
+    declare _room1 varchar(20);
+    declare _room2 varchar(20);
+    declare _room3 varchar(20);
+    
+	set _date=now();
+    set _cnt =0;
+	##################################################################################################
+    drop table if  exists reserv_stat;
+    create table reserv_stat(
+		reserve_date date not null,
+        room1 varchar(20),
+        room2 varchar(20),
+        room3 varchar(20),
+		primary key(reserve_date));
+	##################################################################################################
+    #테이블을 돌면서 날짜가 똑같고 room 넘버가 동일하면 이름을 입력해라.
+    insert into reserv_stat
+    select distinct b.reserve_date,
+		(select ifnull((select b.name from reservation as a where b.reserve_date = a.reserve_date and 1 = a.room), '예약가능')),
+		(select ifnull((select b.name from reservation as a where b.reserve_date = a.reserve_date and 2 = a.room), '예약가능')),
+		(select ifnull((select b.name from reservation as a where b.reserve_date = a.reserve_date and 3 = a.room), '예약가능'))
+	from reservation as b
+    where b.reserve_date BETWEEN DATE_FORMAT(NOW(),'%Y-%m-%d') AND DATE_FORMAT(DATE_ADD(NOW(), INTERVAL 1 MONTH),'%Y-%m-%d'); 
+	##################################################################################################
+    select * from reserv_stat;
+end $$
+
+call resvstat_calc();
+
 
