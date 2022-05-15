@@ -384,8 +384,8 @@ select *, (b.kor+b.eng+b.mat) as sum, (b.kor+b.eng+b.mat)/3 as ave,
 	(select count(*) + 1 from reporttable as a where (a.kor + a.eng + a.mat) > (b.kor + b.eng + b.mat)) as ranking from reporttable as b
 		order by ranking;	#등수를 기준으로 오름차순정렬한다.
         
-#마지막으로 각 과목별,문제별 득점자수와 득점률 리포트를 작성하시오. 수정중
-# 득점자수 수정중 수정중 수정중 수정중 수정중 수정중 수정중 수정중 수정중 수정중 수정중 수정중 수정중 수정중 수정중 수정중 수정중 수정중 수정중 수정중 
+#마지막으로 각 과목별,문제별 득점자수와 득점률 리포트를 작성하시오. 
+# 득점자수 
 drop procedure if exists create_score_list;
 DELIMITER $$
 create procedure create_score_list()
@@ -403,26 +403,26 @@ create table score_list (
 
 	_loop2: loop
 	 set _cnt_sub=_cnt_sub+1;
-		insert into score_list select subjectID, 'a01', count(*), count(*)/10 from scoring where subjectID = _cnt_sub and a01 = 1;
-		insert into score_list select subjectID, 'a02', count(*), count(*)/10 from scoring where subjectID = _cnt_sub and a02 = 1;
-		insert into score_list select subjectID, 'a03', count(*), count(*)/10 from scoring where subjectID = _cnt_sub and a03 = 1;
-		insert into score_list select subjectID, 'a04', count(*), count(*)/10 from scoring where subjectID = _cnt_sub and a04 = 1;
-        insert into score_list select subjectID, 'a05', count(*), count(*)/10 from scoring where subjectID = _cnt_sub and a05 = 1;
-		insert into score_list select subjectID, 'a06', count(*), count(*)/10 from scoring where subjectID = _cnt_sub and a06 = 1;
-        insert into score_list select subjectID, 'a07', count(*), count(*)/10 from scoring where subjectID = _cnt_sub and a07 = 1;
-		insert into score_list select subjectID, 'a08', count(*), count(*)/10 from scoring where subjectID = _cnt_sub and a08 = 1;
-        insert into score_list select subjectID, 'a09', count(*), count(*)/10 from scoring where subjectID = _cnt_sub and a09 = 1;
-		insert into score_list select subjectID, 'a10', count(*), count(*)/10 from scoring where subjectID = _cnt_sub and a10 = 1;
-        insert into score_list select subjectID, 'a11', count(*), count(*)/10 from scoring where subjectID = _cnt_sub and a11 = 1;
-		insert into score_list select subjectID, 'a12', count(*), count(*)/10 from scoring where subjectID = _cnt_sub and a12 = 1;
-        insert into score_list select subjectID, 'a13', count(*), count(*)/10 from scoring where subjectID = _cnt_sub and a13 = 1;
-		insert into score_list select subjectID, 'a14', count(*), count(*)/10 from scoring where subjectID = _cnt_sub and a14 = 1;
-        insert into score_list select subjectID, 'a15', count(*), count(*)/10 from scoring where subjectID = _cnt_sub and a15 = 1;
-		insert into score_list select subjectID, 'a16', count(*), count(*)/10 from scoring where subjectID = _cnt_sub and a16 = 1;
-        insert into score_list select subjectID, 'a17', count(*), count(*)/10 from scoring where subjectID = _cnt_sub and a17 = 1;
-		insert into score_list select subjectID, 'a18', count(*), count(*)/10 from scoring where subjectID = _cnt_sub and a18 = 1;
-        insert into score_list select subjectID, 'a19', count(*), count(*)/10 from scoring where subjectID = _cnt_sub and a19 = 1;
-		insert into score_list select subjectID, 'a20', count(*), count(*)/10 from scoring where subjectID = _cnt_sub and a20 = 1;
+		insert into score_list select subjectID, 'a01', count(*), count(*)/10 from scoring where subjectID = _cnt_sub and a01 = 1 group by subjectID;
+		insert into score_list select subjectID, 'a02', count(*), count(*)/10 from scoring where subjectID = _cnt_sub and a02 = 1 group by subjectID;
+		insert into score_list select subjectID, 'a03', count(*), count(*)/10 from scoring where subjectID = _cnt_sub and a03 = 1 group by subjectID;
+		insert into score_list select subjectID, 'a04', count(*), count(*)/10 from scoring where subjectID = _cnt_sub and a04 = 1 group by subjectID;
+        insert into score_list select subjectID, 'a05', count(*), count(*)/10 from scoring where subjectID = _cnt_sub and a05 = 1 group by subjectID;
+		insert into score_list select subjectID, 'a06', count(*), count(*)/10 from scoring where subjectID = _cnt_sub and a06 = 1 group by subjectID;
+        insert into score_list select subjectID, 'a07', count(*), count(*)/10 from scoring where subjectID = _cnt_sub and a07 = 1 group by subjectID;
+		insert into score_list select subjectID, 'a08', count(*), count(*)/10 from scoring where subjectID = _cnt_sub and a08 = 1 group by subjectID;
+        insert into score_list select subjectID, 'a09', count(*), count(*)/10 from scoring where subjectID = _cnt_sub and a09 = 1 group by subjectID;
+		insert into score_list select subjectID, 'a10', count(*), count(*)/10 from scoring where subjectID = _cnt_sub and a10 = 1 group by subjectID;
+        insert into score_list select subjectID, 'a11', count(*), count(*)/10 from scoring where subjectID = _cnt_sub and a11 = 1 group by subjectID;
+		insert into score_list select subjectID, 'a12', count(*), count(*)/10 from scoring where subjectID = _cnt_sub and a12 = 1 group by subjectID;
+        insert into score_list select subjectID, 'a13', count(*), count(*)/10 from scoring where subjectID = _cnt_sub and a13 = 1 group by subjectID;
+		insert into score_list select subjectID, 'a14', count(*), count(*)/10 from scoring where subjectID = _cnt_sub and a14 = 1 group by subjectID;
+        insert into score_list select subjectID, 'a15', count(*), count(*)/10 from scoring where subjectID = _cnt_sub and a15 = 1 group by subjectID;
+		insert into score_list select subjectID, 'a16', count(*), count(*)/10 from scoring where subjectID = _cnt_sub and a16 = 1 group by subjectID;
+        insert into score_list select subjectID, 'a17', count(*), count(*)/10 from scoring where subjectID = _cnt_sub and a17 = 1 group by subjectID;
+		insert into score_list select subjectID, 'a18', count(*), count(*)/10 from scoring where subjectID = _cnt_sub and a18 = 1 group by subjectID;
+        insert into score_list select subjectID, 'a19', count(*), count(*)/10 from scoring where subjectID = _cnt_sub and a19 = 1 group by subjectID;
+		insert into score_list select subjectID, 'a20', count(*), count(*)/10 from scoring where subjectID = _cnt_sub and a20 = 1 group by subjectID;
         
 		if _cnt_sub = 3 then
 			leave _loop2;
