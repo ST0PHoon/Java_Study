@@ -116,8 +116,24 @@ call insert_examtable(100);
 select *, (b.kor+b.eng+b.mat) as 총점, (b.kor+b.eng+b.mat)/3 as 평균, (
     select count(*)+1 from examtable as a where (a.kor+a.eng+a.mat) > (b.kor+b.eng+b.mat)) as 등수 from examtable as b ;
 
-#등수만 출력
-select name as 이름, (select count(*)+1 from examtable as a where (a.kor+a.eng+a.mat) > (b.kor+b.eng+b.mat)) as 등수 from examtable as b ;
+#등수 pg15 *****************************************************************
+#동일명 함수 삭제 명령
+DROP FUNCTION IF EXISTS print_rank;
+DELIMITER $$
+CREATE FUNCTION print_rank(_id integer) RETURNS integer #함수 선언, 인수와 리턴의 형태 설정
+BEGIN
+	DECLARE _ranking integer; #_ranking 선언
+    #examtable의 등수를 _ranking 입력한다. 입력 받은 id가 동일한 성적에 대해서
+    SELECT (select count(*)+1 from examtable as a where (a.kor+a.eng+a.mat) > (b.kor+b.eng+b.mat)) INTO _ranking FROM examtable as b WHERE id=_id; 
+RETURN _ranking; #_sum을 리턴한다.
+END $$
+DELIMITER ;
+# examtable의 모든 값과 id값의 성적합(함수로 계산) - 이름:합으로 값을 출력한다.
+select *, print_rank(id) as 등수 from examtable;
+#오류에 대한 수정 코드, 교수님이 친절하게 설명해 주셨다.
+show global variables like 'log_gin_trust_function_creators';
+SET Global log_bin_trust_function_creators = 'ON';
+
     
 # 동일명 프로시저 삭제
 DROP PROCEDURE IF EXISTS print_rank;
