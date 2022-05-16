@@ -386,23 +386,27 @@ select *, (b.kor+b.eng+b.mat) as sum, (b.kor+b.eng+b.mat)/3 as ave,
         
 #마지막으로 각 과목별,문제별 득점자수와 득점률 리포트를 작성하시오. 
 # 득점자수 
-drop procedure if exists create_score_list;
+drop procedure if exists create_score_list;	#기존의 프로시저 삭제
 DELIMITER $$
+#들점율 계산후 출력하는 프로시저 선언
 create procedure create_score_list()
 begin
+#변수 선언
 declare _cnt_sub int;
-
+#동일명의 테이블 삭제
 drop table score_list;
+# score_list table 생성(과목번호, 문제, 정답자수 ,정답률)
 create table score_list (
 	subjectId int,
     q_number varchar(10),
     correct_num int,
     correct_rate double);
-
- set _cnt_sub=0;
-
+#과목번호를 바꿔줄 변수에 0 입력
+set _cnt_sub=0;
+	#루프선언
 	_loop2: loop
-	 set _cnt_sub=_cnt_sub+1;
+	 set _cnt_sub=_cnt_sub+1;	#과목번호변수에 1증가
+		# score_list에 입력(insert select문), 과목번호를 기준으로 과목번호, 문제번호, 정답자수, 정답률 입력, scoring테이블에서 과목번호가 똑같고 문제를 맞춘(1)의 경우 1증가
 		insert into score_list select subjectID, 'a01', count(*), count(*)/10 from scoring where subjectID = _cnt_sub and a01 = 1 group by subjectID;
 		insert into score_list select subjectID, 'a02', count(*), count(*)/10 from scoring where subjectID = _cnt_sub and a02 = 1 group by subjectID;
 		insert into score_list select subjectID, 'a03', count(*), count(*)/10 from scoring where subjectID = _cnt_sub and a03 = 1 group by subjectID;
@@ -423,15 +427,15 @@ create table score_list (
 		insert into score_list select subjectID, 'a18', count(*), count(*)/10 from scoring where subjectID = _cnt_sub and a18 = 1 group by subjectID;
         insert into score_list select subjectID, 'a19', count(*), count(*)/10 from scoring where subjectID = _cnt_sub and a19 = 1 group by subjectID;
 		insert into score_list select subjectID, 'a20', count(*), count(*)/10 from scoring where subjectID = _cnt_sub and a20 = 1 group by subjectID;
-        
+        #과목이 3개이므로 3에서 루프문 탈출
 		if _cnt_sub = 3 then
 			leave _loop2;
 		end if;
 	end loop _loop2;
-
+#이후 입력받은 결과를 출력한다. (subjectId는 과목, q_number는 문제, correct_num는 득점자, correct_rate는 득점률)
 select subjectId as 과목, q_number as 문제, correct_num as 득점자, correct_rate as 득점률 from score_list ;
 end $$
-call create_score_list();
+call create_score_list();	#프로시저 실행
 
 
 
@@ -449,33 +453,33 @@ create table reservation (
     memo varchar(100),
     input_date date);
 #임의 값 넣기
-insert into reservation values ("정연","2022-05-26",1,"서울","010-0101-0101","나연","따뜻한방 주세요",DATE_FORMAT(NOW(),'%Y-%m-%d'));
-insert into reservation values ("모모","2022-05-27",1,"서울","010-0101-0101","나연","따뜻한방 주세요",DATE_FORMAT(NOW(),'%Y-%m-%d'));
-insert into reservation values ("모모","2022-05-29",1,"서울","010-0101-0101","나연","따뜻한방 주세요",DATE_FORMAT(NOW(),'%Y-%m-%d'));
-insert into reservation values ("채영","2022-05-30",1,"서울","010-0101-0101","나연","따뜻한방 주세요",DATE_FORMAT(NOW(),'%Y-%m-%d'));
-insert into reservation values ("정연","2022-06-01",2,"서울","010-0101-0101","나연","따뜻한방 주세요",DATE_FORMAT(NOW(),'%Y-%m-%d'));
-insert into reservation values ("모모","2022-06-02",1,"서울","010-0101-0101","나연","따뜻한방 주세요",DATE_FORMAT(NOW(),'%Y-%m-%d'));
-insert into reservation values ("사나","2022-06-03",1,"서울","010-0101-0101","나연","따뜻한방 주세요",DATE_FORMAT(NOW(),'%Y-%m-%d'));
-insert into reservation values ("지효","2022-06-04",1,"서울","010-0101-0101","나연","따뜻한방 주세요",DATE_FORMAT(NOW(),'%Y-%m-%d'));
+insert into reservation values ("정연","2022-05-26",1,"서울","010-0101-0101","정연","따뜻한방 주세요",DATE_FORMAT(NOW(),'%Y-%m-%d'));
+insert into reservation values ("모모","2022-05-27",1,"서울","010-0101-0101","모모","따뜻한방 주세요",DATE_FORMAT(NOW(),'%Y-%m-%d'));
+insert into reservation values ("모모","2022-05-29",1,"서울","010-0101-0101","모모","따뜻한방 주세요",DATE_FORMAT(NOW(),'%Y-%m-%d'));
+insert into reservation values ("채영","2022-05-30",1,"서울","010-0101-0101","채영","따뜻한방 주세요",DATE_FORMAT(NOW(),'%Y-%m-%d'));
+insert into reservation values ("정연","2022-06-01",2,"서울","010-0101-0101","정연","따뜻한방 주세요",DATE_FORMAT(NOW(),'%Y-%m-%d'));
+insert into reservation values ("모모","2022-06-02",1,"서울","010-0101-0101","모모","따뜻한방 주세요",DATE_FORMAT(NOW(),'%Y-%m-%d'));
+insert into reservation values ("사나","2022-06-03",1,"서울","010-0101-0101","사나","따뜻한방 주세요",DATE_FORMAT(NOW(),'%Y-%m-%d'));
+insert into reservation values ("지효","2022-06-04",1,"서울","010-0101-0101","지효","따뜻한방 주세요",DATE_FORMAT(NOW(),'%Y-%m-%d'));
 insert into reservation values ("나연","2022-06-05",1,"서울","010-0101-0101","나연","따뜻한방 주세요",DATE_FORMAT(NOW(),'%Y-%m-%d'));
-insert into reservation values ("정연","2022-06-06",1,"서울","010-0101-0101","나연","따뜻한방 주세요",DATE_FORMAT(NOW(),'%Y-%m-%d'));
-insert into reservation values ("모모","2022-06-10",1,"서울","010-0101-0101","나연","따뜻한방 주세요",DATE_FORMAT(NOW(),'%Y-%m-%d'));
-insert into reservation values ("사나","2022-06-11",1,"서울","010-0101-0101","나연","따뜻한방 주세요",DATE_FORMAT(NOW(),'%Y-%m-%d'));
-insert into reservation values ("지효","2022-06-12",1,"서울","010-0101-0101","나연","따뜻한방 주세요",DATE_FORMAT(NOW(),'%Y-%m-%d'));
+insert into reservation values ("나연","2022-06-06",1,"서울","010-0101-0101","나연","따뜻한방 주세요",DATE_FORMAT(NOW(),'%Y-%m-%d'));
+insert into reservation values ("모모","2022-06-10",1,"서울","010-0101-0101","모모","따뜻한방 주세요",DATE_FORMAT(NOW(),'%Y-%m-%d'));
+insert into reservation values ("사나","2022-06-11",1,"서울","010-0101-0101","사나","따뜻한방 주세요",DATE_FORMAT(NOW(),'%Y-%m-%d'));
+insert into reservation values ("지효","2022-06-12",1,"서울","010-0101-0101","지효","따뜻한방 주세요",DATE_FORMAT(NOW(),'%Y-%m-%d'));
 insert into reservation values ("나연","2022-06-13",1,"서울","010-0101-0101","나연","따뜻한방 주세요",DATE_FORMAT(NOW(),'%Y-%m-%d'));
-insert into reservation values ("정연","2022-06-14",1,"서울","010-0101-0101","나연","따뜻한방 주세요",DATE_FORMAT(NOW(),'%Y-%m-%d'));
-insert into reservation values ("모모","2022-06-15",1,"서울","010-0101-0101","나연","따뜻한방 주세요",DATE_FORMAT(NOW(),'%Y-%m-%d'));
-insert into reservation values ("사나","2022-06-16",1,"서울","010-0101-0101","나연","따뜻한방 주세요",DATE_FORMAT(NOW(),'%Y-%m-%d'));
+insert into reservation values ("정연","2022-06-14",1,"서울","010-0101-0101","정연","따뜻한방 주세요",DATE_FORMAT(NOW(),'%Y-%m-%d'));
+insert into reservation values ("모모","2022-06-15",1,"서울","010-0101-0101","모모","따뜻한방 주세요",DATE_FORMAT(NOW(),'%Y-%m-%d'));
+insert into reservation values ("사나","2022-06-16",1,"서울","010-0101-0101","사나","따뜻한방 주세요",DATE_FORMAT(NOW(),'%Y-%m-%d'));
 insert into reservation values ("나연","2022-06-18",1,"서울","010-0101-0101","나연","따뜻한방 주세요",DATE_FORMAT(NOW(),'%Y-%m-%d'));
-insert into reservation values ("모모","2022-06-28",1,"서울","010-0101-0101","나연","따뜻한방 주세요",DATE_FORMAT(NOW(),'%Y-%m-%d'));
-insert into reservation values ("사나","2022-06-29",1,"서울","010-0101-0101","나연","따뜻한방 주세요",DATE_FORMAT(NOW(),'%Y-%m-%d'));
+insert into reservation values ("모모","2022-06-28",1,"서울","010-0101-0101","모모","따뜻한방 주세요",DATE_FORMAT(NOW(),'%Y-%m-%d'));
+insert into reservation values ("사나","2022-06-29",1,"서울","010-0101-0101","사나","따뜻한방 주세요",DATE_FORMAT(NOW(),'%Y-%m-%d'));
 insert into reservation values ("나연","2022-06-30",1,"서울","010-0101-0101","나연","따뜻한방 주세요",DATE_FORMAT(NOW(),'%Y-%m-%d'));
-insert into reservation values ("모모","2022-05-27",2,"서울","010-0101-0101","나연","따뜻한방 주세요",DATE_FORMAT(NOW(),'%Y-%m-%d'));
-insert into reservation values ("다현","2022-05-29",2,"서울","010-0101-0101","나연","따뜻한방 주세요",DATE_FORMAT(NOW(),'%Y-%m-%d'));
-insert into reservation values ("지효","2022-06-04",2,"서울","010-0101-0101","나연","따뜻한방 주세요",DATE_FORMAT(NOW(),'%Y-%m-%d'));
-insert into reservation values ("지효","2022-06-17",2,"서울","010-0101-0101","나연","따뜻한방 주세요",DATE_FORMAT(NOW(),'%Y-%m-%d'));
-insert into reservation values ("지효","2022-06-12",3,"서울","010-0101-0101","나연","따뜻한방 주세요",DATE_FORMAT(NOW(),'%Y-%m-%d'));
-insert into reservation values ("지효","2022-06-29",3,"서울","010-0101-0101","나연","따뜻한방 주세요",DATE_FORMAT(NOW(),'%Y-%m-%d'));
+insert into reservation values ("모모","2022-05-27",2,"서울","010-0101-0101","모모","따뜻한방 주세요",DATE_FORMAT(NOW(),'%Y-%m-%d'));
+insert into reservation values ("다현","2022-05-29",2,"서울","010-0101-0101","다현","따뜻한방 주세요",DATE_FORMAT(NOW(),'%Y-%m-%d'));
+insert into reservation values ("지효","2022-06-04",2,"서울","010-0101-0101","지효","따뜻한방 주세요",DATE_FORMAT(NOW(),'%Y-%m-%d'));
+insert into reservation values ("지효","2022-06-17",2,"서울","010-0101-0101","지효","따뜻한방 주세요",DATE_FORMAT(NOW(),'%Y-%m-%d'));
+insert into reservation values ("지효","2022-06-12",3,"서울","010-0101-0101","지효","따뜻한방 주세요",DATE_FORMAT(NOW(),'%Y-%m-%d'));
+insert into reservation values ("지효","2022-06-29",3,"서울","010-0101-0101","지효","따뜻한방 주세요",DATE_FORMAT(NOW(),'%Y-%m-%d'));
 
 #1달간 예약보기 위한 프로시저
 drop procedure if exists resvstat_calc;	#기존의 동일명 프로시저 삭제
@@ -484,11 +488,15 @@ delimiter $$
 create procedure resvstat_calc()
 begin
 	#변수 선언, 날짜, 방 1 2 3 선언
-	declare _date date;
+   declare _date date;
+    declare _cnt integer;
     declare _room1 varchar(20);
     declare _room2 varchar(20);
     declare _room3 varchar(20);
-	##################################################################################################
+    # now()의 포멧변경(yy-mm-dd)
+	set _date = date_format(now(),'%Y-%m-%d');
+    set _cnt = -1; #오늘부터 카운딩할거라 -1
+	#############################################################################################################################################################################
     drop table if  exists reserv_stat;	#기존의 동일명 테이블 삭제
     # 결과 테이블 생성, 프라이머리키로 입실날짜 지정
     create table reserv_stat(
@@ -498,19 +506,27 @@ begin
         room3 varchar(20),
 		primary key(reserve_date)
         );
-	##################################################################################################
+	#############################################################################################################################################################################
     #테이블을 돌면서 날짜가 똑같고 room 넘버가 동일하면 이름을 입력해라.
-    insert into reserv_stat
-    select distinct b.reserve_date,
-		# 방번호와 예약 날짜가 동일하면 해당 예약자명을 입력해라, 단 값이 없으면 예약가능으로 입력해라
-		(select ifnull((select a1.name from reservation as a1 where b.reserve_date = a1.reserve_date and 1 = a1.room), '예약가능')),
-		(select ifnull((select a2.name from reservation as a2 where b.reserve_date = a2.reserve_date and 2 = a2.room), '예약가능')),
-		(select ifnull((select a3.name from reservation as a3 where b.reserve_date = a3.reserve_date and 3 = a3.room), '예약가능'))
-	from reservation as b
-	#오늘부터 1달 뒤까지의 범위를 적용해서 reservation(b)를 참조해라
-    where b.reserve_date BETWEEN DATE_FORMAT(NOW(),'%Y-%m-%d') AND DATE_FORMAT(DATE_ADD(NOW(), INTERVAL 1 MONTH),'%Y-%m-%d'); 
-	##################################################################################################
+	_loop: LOOP	#루프선언
+    set _cnt = _cnt+1;	#날짜 하루 증가
+	#값입력, reserv_stat(reserve_date, room1, room2, room3) 값에 예약날짜, 예약가능 여부 및 신청인원 입력
+         insert into reserv_stat (reserve_date, room1, room2, room3)
+         #date_add를 통해서 오늘 날짜에 _cnt의 수 만큼 날짜 추가
+         select distinct (date_add(_date, interval _cnt day)),
+			#reservation(a)의 name을 출력한다. 
+            (select ifnull((select a.name from reservation as a where a.reserve_date = (date_add(_date, interval _cnt day)) and a.room =1), '예약가능')),
+            (select ifnull((select a.name from reservation as a where a.reserve_date = (date_add(_date, interval _cnt day)) and a.room =2), '예약가능')),
+            (select ifnull((select a.name from reservation as a where a.reserve_date = (date_add(_date, interval _cnt day)) and a.room =3), '예약가능'))
+         from reservation;
+		#루프선언 한달치만큼 돌고 루프종료하는 if문 작성
+		if _cnt = 31 then
+            leave _loop;
+         end if;
+        end loop _loop;
+	#############################################################################################################################################################################
     select * from reserv_stat;	#해당 결과테이블 생성
 end $$
+delimiter ;
 #함수실행
 call resvstat_calc();
